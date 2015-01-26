@@ -34,12 +34,22 @@ def prueba_colores(imagen):
 					pixeles[x, y] = (255, 255, 255)
 				print x, y, pixeles[x, y]
 	imagen.show()
+	
+def aplicar_filtro(imagen):
+	w, h = imagen.size
+	pixeles = imagen.load()
+	for x in xrange(w):
+		for y in xrange(h):
+			encontrar_vecinos(x, y)
+	
+def encontrar_vecinos(x_pixel, y_pixel):
+	for x in xrange(x_pixel):
 
 if len(sys.argv) == 2:
 	filename = sys.argv[1]
 	if os.path.isfile(filename):
 		#imagen = Image.open(filename)
-		imagen = Image.new('RGB', (10, 20))
+		imagen = Image.new('RGB', (5, 5))
 		draw = ImageDraw.Draw(imagen)
 		imagen_datos = imagen.getdata()
 		hola1 = encontrar_colores(imagen)
