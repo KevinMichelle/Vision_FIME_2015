@@ -3,6 +3,7 @@ import ImageDraw
 import sys
 import os.path
 import operator
+import math
 
 
 #Si, lo recorro de manera diferente que en otras funciones
@@ -63,6 +64,21 @@ def encontrar_vecinos(pixeles, x_pixel, y_pixel):
 	print "verde", verde_vecinos
 	print "azul", azul_vecinos
 	print
+	print (mediana(rojo_vecinos), mediana(verde_vecinos), mediana(azul_vecinos))
+	return (mediana(rojo_vecinos), mediana(verde_vecinos), mediana(azul_vecinos))
+
+#Implementacion basada en la descripcion de Wikipedia y la respuesta de Stack Overflow
+#http://en.wikipedia.org/wiki/Median#Medians_for_samples
+#http://stackoverflow.com/questions/24101524/finding-median-of-list-in-python/24101655#24101655
+#Nota_Las listas empiezan en la posicion 0, por eso asi es el algoritmo
+def mediana(lista):
+	if len(lista) % 2 == 0:
+		suma = lista[(len(lista) / 2) - 1] + lista[len(lista)/2]
+		mediana_par =  math.ceil(suma / 2.0)
+		return int(mediana_par)
+	else:
+		return lista[((len(lista) + 1)/2) - 1]
+	
 
 if len(sys.argv) == 2:
 	filename = sys.argv[1]
