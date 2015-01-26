@@ -35,24 +35,35 @@ def prueba_colores(imagen):
 				elif (x == xs - 1 and y == ys - 1):
 					pixeles[x, y] = (255, 255, 255)
 	
-def aplicar_filtro(imagen, tipo_filtro):
+def aplicar_filtro(imagen, opciones):
 	inicio = datetime.datetime.now()
+	tipo_vecinos = opciones[0]
+	tipo_filtro = opciones[1]
 	xs, ys = imagen.size
 	pixeles = imagen.load()
 	nueva_imagen = imagen.copy()
-	pixeles_a_filtrar = nueva_imagen.load()
+	print "Tipo de vecinos: {}, tipo de filtro: {}".format(tipo_vecinos,tipo_filtro)
+	pixeles_nuevos = nueva_imagen.load()
 	for y in xrange(ys):
 		for x in xrange(xs):
-			rgb = encontrar_vecinos(pixeles, x, y)
-			pixeles_a_filtrar[x, y] = rgb
-	imagen.show()
+			colores_vecinos = encontrar_vecinos(pixeles, x, y)
+			rojo_vecinos = colores_vecinos[0]
+			verde_vecinos = colores_vecinos[1]
+			azul_vecinos = colores_vecinos[2]
+			if tipo_filtro == 0:
+				# Tipo de filtro: mediana
+				rgb = (mediana(rojo_vecinos), mediana(verde_vecinos), mediana(azul_vecinos))
+			elif tipo_filtro == 1:
+				# Tipo de filtro: promedio aritmetico
+				rgb = (promedio(rojo_vecinos), promedio(verde_vecinos), promedio(azul_vecinos))
+			pixeles_nuevos[x, y] = rgb
 	nueva_imagen.show()
 	fin = datetime.datetime.now()
 	tiempo_ejecucion = fin - inicio
 	print "\tTiempo para modificar la imagen {} : {} segundos".format((xs, ys), tiempo_ejecucion)
 
 #El pixel se accede con los valores de x, y
-def encontrar_vecinos(pixeles, x_pixel, y_pixel, tipo_filtro):
+def encontrar_vecinos(pixeles, x_pixel, y_pixel):
 	xs, ys = imagen.size
 	rojo_vecinos = []
 	verde_vecinos = []
@@ -68,9 +79,7 @@ def encontrar_vecinos(pixeles, x_pixel, y_pixel, tipo_filtro):
 	rojo_vecinos.sort()
 	verde_vecinos.sort()
 	azul_vecinos.sort()
-	if tipo_filtro == 0:
-		return (mediana(rojo_vecinos), mediana(verde_vecinos), mediana(azul_vecinos))
-	elif tipo_filtro == 1:
+	return (rojo_vecinos, verde_vecinos, azul_vecinos)
 
 #Implementacion basada en la descripcion de Wikipedia y la respuesta de Stack Overflow
 #http://en.wikipedia.org/wiki/Median#Medians_for_samples
@@ -83,6 +92,14 @@ def mediana(lista):
 		return int(mediana_par)
 	else:
 		return lista[((len(lista) + 1)/2) - 1]
+		
+def promedio(lista):
+	suma = 0
+	for i in lista:
+		suma += i
+	prom = float(suma) / float(len(lista))
+	return int(math.ceil(prom))
+	
 	
 
 if len(sys.argv) == 2:
@@ -91,7 +108,11 @@ if len(sys.argv) == 2:
 		imagen_original = Image.open(filename)
 		imagen = imagen_original.convert('RGB')
 		#imagen = Image.new('RGB', (5, 5))
-		aplicar_filtro(imagen)
+		imagen.show()
+		opciones = (0, 0)
+		aplicar_filtro(imagen, opciones)
+		opciones = (0, 1)
+		aplicar_filtro(imagen, opciones)
 		prueba_colores(imagen)
 	else:
 		print "No existe el archivo %s" %filename
