@@ -4,7 +4,7 @@ import sys
 import os.path
 import operator
 import math
-
+import datetime
 
 #Si, lo recorro de manera diferente que en otras funciones
 def encontrar_colores(imagen):
@@ -34,15 +34,22 @@ def prueba_colores(imagen):
 					pixeles[x, y]  = (0, 0, 255)
 				elif (x == xs - 1 and y == ys - 1):
 					pixeles[x, y] = (255, 255, 255)
-				print x, y, pixeles[x, y]
 	
 def aplicar_filtro(imagen):
+	inicio = datetime.datetime.now()
 	xs, ys = imagen.size
 	pixeles = imagen.load()
+	nueva_imagen = imagen.copy()
+	pixeles_a_filtrar = nueva_imagen.load()
 	for y in xrange(ys):
 		for x in xrange(xs):
-			print "muestra1", y, x, pixeles[x, y]
-			encontrar_vecinos(pixeles, x, y)
+			rgb = encontrar_vecinos(pixeles, x, y)
+			pixeles_a_filtrar[x, y] = rgb
+	imagen.show()
+	nueva_imagen.show()
+	fin = datetime.datetime.now()
+	tiempo_ejecucion = fin - inicio
+	print "\tTiempo para modificar la imagen {} : {} segundos".format((xs, ys), tiempo_ejecucion)
 
 #El pixel se accede con los valores de x, y
 def encontrar_vecinos(pixeles, x_pixel, y_pixel):
@@ -54,17 +61,13 @@ def encontrar_vecinos(pixeles, x_pixel, y_pixel):
 		if y >= 0 and y < ys:
 			for x in xrange(x_pixel - 1, x_pixel + 2):
 				if x >= 0 and x < xs:
-					print y, x
 					pixel = pixeles[x, y]
 					rojo_vecinos.append(pixel[0])
 					verde_vecinos.append(pixel[1])
 					azul_vecinos.append(pixel[2])
-	print
-	print "rojos", rojo_vecinos
-	print "verde", verde_vecinos
-	print "azul", azul_vecinos
-	print
-	print (mediana(rojo_vecinos), mediana(verde_vecinos), mediana(azul_vecinos))
+	rojo_vecinos.sort()
+	verde_vecinos.sort()
+	azul_vecinos.sort()
 	return (mediana(rojo_vecinos), mediana(verde_vecinos), mediana(azul_vecinos))
 
 #Implementacion basada en la descripcion de Wikipedia y la respuesta de Stack Overflow
@@ -83,14 +86,13 @@ def mediana(lista):
 if len(sys.argv) == 2:
 	filename = sys.argv[1]
 	if os.path.isfile(filename):
-		imagen = Image.open(filename)
+		imagen_original = Image.open(filename)
+		imagen = imagen_original.convert('RGB')
 		#imagen = Image.new('RGB', (5, 5))
 		draw = ImageDraw.Draw(imagen)
 		imagen_datos = imagen.getdata()
 		aplicar_filtro(imagen)
 		prueba_colores(imagen)
-		print "hola"
-		print imagen.size
 	else:
 		print "No existe el archivo %s" %filename
 else:
