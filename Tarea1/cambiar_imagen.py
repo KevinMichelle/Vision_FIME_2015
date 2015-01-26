@@ -40,10 +40,27 @@ def aplicar_filtro(imagen):
 	pixeles = imagen.load()
 	for x in xrange(w):
 		for y in xrange(h):
-			encontrar_vecinos(x, y)
-	
-def encontrar_vecinos(x_pixel, y_pixel):
-	for x in xrange(x_pixel):
+			encontrar_vecinos(imagen, x, y)
+
+def encontrar_vecinos(imagen, x_pixel, y_pixel):
+	rojo_vecinos = []
+	verde_vecinos = []
+	azul_vecinos = []
+	pixeles = imagen.load()
+	w, h = imagen.size
+	print "pixel: ", x_pixel, y_pixel
+	for x in xrange(x_pixel - 1, x_pixel + 2):
+		if x >= 0 and x < w:
+			for y in xrange(y_pixel - 1, y_pixel + 2):
+				if y >= 0 and y < h:
+					print "hola", x, y
+					pixel = pixeles[x, y]
+					rojo_vecinos.append(pixel[0])
+					verde_vecinos.append(pixel[1])
+					azul_vecinos.append(pixel[2])
+	print "rojos", rojo_vecinos
+	print "verde", verde_vecinos
+	print "azul", azul_vecinos
 
 if len(sys.argv) == 2:
 	filename = sys.argv[1]
@@ -57,6 +74,7 @@ if len(sys.argv) == 2:
 		hola2 = encontrar_colores(imagen)
 		print hola2
 		prueba_colores(imagen)
+		aplicar_filtro(imagen)
 	else:
 		print "No existe el archivo %s" %filename
 else:
