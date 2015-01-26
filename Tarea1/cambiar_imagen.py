@@ -89,8 +89,6 @@ if len(sys.argv) == 2:
 		imagen_original = Image.open(filename)
 		imagen = imagen_original.convert('RGB')
 		#imagen = Image.new('RGB', (5, 5))
-		draw = ImageDraw.Draw(imagen)
-		imagen_datos = imagen.getdata()
 		aplicar_filtro(imagen)
 		prueba_colores(imagen)
 	else:
