@@ -35,7 +35,7 @@ def prueba_colores(imagen):
 				elif (x == xs - 1 and y == ys - 1):
 					pixeles[x, y] = (255, 255, 255)
 	
-def aplicar_filtro(imagen):
+def aplicar_filtro(imagen, tipo_filtro):
 	inicio = datetime.datetime.now()
 	xs, ys = imagen.size
 	pixeles = imagen.load()
@@ -52,7 +52,7 @@ def aplicar_filtro(imagen):
 	print "\tTiempo para modificar la imagen {} : {} segundos".format((xs, ys), tiempo_ejecucion)
 
 #El pixel se accede con los valores de x, y
-def encontrar_vecinos(pixeles, x_pixel, y_pixel):
+def encontrar_vecinos(pixeles, x_pixel, y_pixel, tipo_filtro):
 	xs, ys = imagen.size
 	rojo_vecinos = []
 	verde_vecinos = []
@@ -68,7 +68,9 @@ def encontrar_vecinos(pixeles, x_pixel, y_pixel):
 	rojo_vecinos.sort()
 	verde_vecinos.sort()
 	azul_vecinos.sort()
-	return (mediana(rojo_vecinos), mediana(verde_vecinos), mediana(azul_vecinos))
+	if tipo_filtro == 0:
+		return (mediana(rojo_vecinos), mediana(verde_vecinos), mediana(azul_vecinos))
+	elif tipo_filtro == 1:
 
 #Implementacion basada en la descripcion de Wikipedia y la respuesta de Stack Overflow
 #http://en.wikipedia.org/wiki/Median#Medians_for_samples
