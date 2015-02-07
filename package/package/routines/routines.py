@@ -1,1 +1,0 @@
-from PIL import Imagedef escala_grises(imagen):	xs, ys = imagen.size	pixeles = imagen.load()	nueva_imagen = imagen.copy()	pixeles_nuevos = nueva_imagen.load()	for y in xrange(ys):		for x in xrange(xs):			pixel = pixeles[x, y]			promedio = (pixel[0] + pixel[1] + pixel[2]) / 3			pixeles_nuevos[x, y] = (promedio, promedio, promedio)	return nueva_imagen
