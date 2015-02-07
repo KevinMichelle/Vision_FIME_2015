@@ -39,10 +39,15 @@ def mask_info(mask):
 	else:
 		#Error
 		quit()
+		
+def define_masks():
+	file_mask = auxiliary.traer_archivos("masks", ".txt")
+	print file_mask
 
 
 
 def prueba_colores(imagen):
+	define_masks()
 	xs, ys = imagen.size
 	pixeles = imagen.load()
 	for y in xrange(ys):

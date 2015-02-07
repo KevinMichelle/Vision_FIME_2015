@@ -1,4 +1,4 @@
-import os.path
+import os
 import math
 
 def promedio(lista):
@@ -29,3 +29,12 @@ def existe_archivo(argv):
 		else:
 			print "No existe archivo '{}'".format(filename)
 			return False
+		
+#http://stackoverflow.com/a/3964691
+def traer_archivos(dir, file_ext):
+	archivos = []
+	for file in os.listdir(dir):
+		if file.endswith(file_ext):
+			archivos.append(file)
+	return archivos
+			
