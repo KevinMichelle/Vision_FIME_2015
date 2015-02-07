@@ -32,7 +32,9 @@ def existe_archivo(argv):
 		
 #http://stackoverflow.com/a/3964691
 def traer_archivos(dir, file_ext):
+	print os.getcwd()
 	archivos = []
+	print dir
 	for file in os.listdir(dir):
 		if file.endswith(file_ext):
 			archivos.append(file)

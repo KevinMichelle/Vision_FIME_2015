@@ -41,13 +41,12 @@ def mask_info(mask):
 		quit()
 		
 def define_masks():
-	file_mask = auxiliary.traer_archivos("masks", ".txt")
+	file_mask = auxiliary.traer_archivos("edge_detection\masks", ".txt")
 	print file_mask
 
 
 
 def prueba_colores(imagen):
-	define_masks()
 	xs, ys = imagen.size
 	pixeles = imagen.load()
 	for y in xrange(ys):
@@ -155,6 +154,7 @@ def __main__(filename):
 	imagen_mascara = aplicar_mascara(imagen_grises, mascara, True)
 	imagen_grises.show()
 	imagen_mascara.show()
+	define_masks()
 
 #run in the 'package' directory
 #python -m edge_detection.mascaras ejemplos\shantae.png
