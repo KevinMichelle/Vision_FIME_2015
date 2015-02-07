@@ -2,8 +2,8 @@ from PIL import Image
 import sys
 import os.path
 import math
-import rutinas
-import procesamiento
+import routines.routines as routines
+import routines.auxiliary as auxiliary
 
 mascara1 = [(1, 4, 1), (4, 8, 4), (1, 4, 1)]
 mascara2 = [(1, 2, 1), (2, 4, 2), (1, 2, 1)]
@@ -126,7 +126,7 @@ def aplicar_mascara(image, mask, multiple):
 				else:
 					gradients[new_value] += 1
 				pixel_gradient.append((y, x, new_value))
-				if new_value > 255:
+				if new_value > 200:
 					new_pixels[x, y] = (0, 0, 255)
 				else:
 					new_pixels[x, y] = (255, 255, 255)
@@ -137,21 +137,24 @@ def aplicar_mascara(image, mask, multiple):
 		gradients_list = []
 		for i in gradients:
 			gradients_list.append(i)
-		gradient_mean = rutinas.mediana(gradients_list)
+		gradient_mean = auxiliary.mediana(gradients_list)
 		print gradient_mean
-		print rutinas.promedio(gradients_list)
+		print auxiliary.promedio(gradients_list)
 	return new_image
 	
 def __main__(filename):
 	imagen_original = Image.open(filename)
 	imagen_original = imagen_original.convert('RGB')
-	imagen_grises = procesamiento.escala_grises(imagen_original)
+	imagen_grises = routines.escala_grises(imagen_original)
 	mascara = sobel
 	imagen_mascara = aplicar_mascara(imagen_grises, mascara, True)
 	imagen_grises.show()
 	imagen_mascara.show()
-	
+
+#run in the 'package' directory
+#python -m edge_detection.mascaras ejemplos\shantae.png
 if __name__ == '__main__':
-	existe = rutinas.existe_archivo(sys.argv)
+	print sys.argv[1]
+	existe = auxiliary.existe_archivo(sys.argv)
 	if existe:
 		__main__(sys.argv[len(sys.argv) - 1])

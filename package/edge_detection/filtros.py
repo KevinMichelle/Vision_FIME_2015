@@ -1,7 +1,7 @@
 from PIL import Image
 import sys
-import rutinas
-import procesamiento
+import routines.routines as routines
+import routines.auxiliary as auxiliary
 
 def aplicar_filtro(imagen, tipo_vecino, tipo_filtro):
 	xs, ys = imagen.size
@@ -17,9 +17,9 @@ def aplicar_filtro(imagen, tipo_vecino, tipo_filtro):
 						if dx >= 0 and dx < xs:
 							vecinos_valores.append(pixeles[dx, dy][0])
 			if tipo_filtro == 0: #mediana
-				nuevo_valor = rutinas.mediana(vecinos_valores)
+				nuevo_valor = auxiliary.mediana(vecinos_valores)
 			if tipo_filtro == 1: #promedio
-				nuevo_valor = rutinas.promedio(vecinos_valores)
+				nuevo_valor = auxiliary.promedio(vecinos_valores)
 			pixeles_nuevos[x, y] = (nuevo_valor, nuevo_valor, nuevo_valor)
 	return nueva_imagen
 				
@@ -27,7 +27,7 @@ def aplicar_filtro(imagen, tipo_vecino, tipo_filtro):
 def __main__(filename):
 	imagen_original = Image.open(filename)
 	imagen_original = imagen_original.convert('RGB')
-	imagen_grises = procesamiento.escala_grises(imagen_original)
+	imagen_grises = routines.escala_grises(imagen_original)
 	imagen_mediana = aplicar_filtro(imagen_grises, 0, 0)
 	imagen_promedio = aplicar_filtro(imagen_grises, 0, 1)
 	imagen_grises.show()
@@ -35,6 +35,6 @@ def __main__(filename):
 	imagen_promedio.show()
 
 if __name__ == '__main__':
-	existe = rutinas.existe_archivo(sys.argv)
+	existe = auxiliary.existe_archivo(sys.argv)
 	if existe:
 		__main__(sys.argv[len(sys.argv) - 1])
