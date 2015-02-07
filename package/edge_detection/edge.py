@@ -3,6 +3,8 @@ import sys
 import os.path
 import math
 import rutinas
+import routines.routines as routines
+import routines.auxiliary as auxiliary
 
 def __main__(filename):
 	imagen_original = Image.open(filename)
