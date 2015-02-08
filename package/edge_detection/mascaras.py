@@ -176,7 +176,8 @@ def aplicar_mascara(image, mask, multiple):
 				new_value = sumatoria / mask_weight
 				new_pixels[x, y] = (new_value, new_value, new_value)
 			else:
-				new_pixels[x, y] = (0, 0, 0)
+				pixel = pixels[x, y]
+				new_pixels[x, y] = (pixel[0], pixel[1], pixel[2])
 				new_value = int(math.pow(abs(sumatoria1) + abs(sumatoria2), 2))
 				if new_value not in gradients:
 					gradients[new_value] = 1
@@ -189,7 +190,7 @@ def aplicar_mascara(image, mask, multiple):
 			pixel = new_pixel_gradient[index_pixel]
 			nxp, nyp, nvp = pixel[0], pixel[1], pixel[2]
 			if nvp == 1:
-				new_pixels[nxp, nyp] = (255, 255, 255)
+				new_pixels[nxp, nyp] = (255, 0, 0)
 		print "hola"
 	return new_image
 	
