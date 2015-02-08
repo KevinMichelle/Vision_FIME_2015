@@ -3,8 +3,8 @@ import sys
 import os.path
 import math
 import random
-import routines.routines as routines
-import routines.auxiliary as auxiliary
+import routines.routines as rout
+import routines.auxiliary as aux
 
 
 def mask_info(mask):
@@ -85,7 +85,7 @@ def define_mask(options):
 		mask = open_file_mask(file, dir)
 	else:
 		dir = "edge_detection\masks\\"
-		file_mask = auxiliary.traer_archivos(dir, ext)
+		file_mask = aux.traer_archivos(dir, ext)
 		for file in file_mask:
 			dummy_mask = open_file_mask(file, dir)
 		mask = random.choice(dummy_mask)
@@ -182,21 +182,23 @@ def aplicar_mascara(image, mask, multiple):
 				else:
 					gradients[new_value] += 1
 				pixel_gradient.append((y, x, new_value))
-				if new_value > 200:
-					new_pixels[x, y] = (0, 0, 255)
-				else:
-					new_pixels[x, y] = (255, 255, 255)
+				#if new_value > 200:
+				#	new_pixels[x, y] = (0, 0, 255)
+				#else:
+				#	new_pixels[x, y] = (255, 255, 255)
 	if multiple:
-		for i in gradients:
-			print i
-		print gradients
-		gradients_list = []
-		for i in gradients:
-			gradients_list.append(i)
-		gradient_mean = auxiliary.mediana(gradients_list)
-		print gradient_mean
-		print auxiliary.promedio(gradients_list)
+		edge_detection(gradients, pixel_gradient)
 	return new_image
+	
+def edge_detection(gradients, pixel_gradient):
+	gradients_list = aux.dict_to_list(gradients)
+	threshold = aux.median_absolute_deviation(gradients_list)
+	for pixel in pixel_gradient:
+		if pixel_gradient[pixel] >= threshold:
+			pixel_gradient[pixel] = 1
+		else:
+			pixel_gradient[pixel] = 0
+	print pixel_gradient
 	
 def __main__(filename, bool_mask):
 	options_mask = []
@@ -209,7 +211,7 @@ def __main__(filename, bool_mask):
 	mask = define_mask (options_mask)
 	imagen_original = Image.open(filename)
 	imagen_original = imagen_original.convert('RGB')
-	imagen_grises = routines.escala_grises(imagen_original)
+	imagen_grises = rout.escala_grises(imagen_original)
 	imagen_mascara = aplicar_mascara(imagen_grises, mask, bool_mask)
 	imagen_grises.show()
 	imagen_mascara.show()
@@ -217,7 +219,7 @@ def __main__(filename, bool_mask):
 #run in the 'package' directory
 #python -m edge_detection.mascaras ejemplos\shantae.png
 if __name__ == '__main__':
-	existe = auxiliary.existe_archivo(sys.argv)
+	existe = aux.existe_archivo(sys.argv)
 	if existe:
 		bool_mask = False
 		if len(sys.argv) > 2:
