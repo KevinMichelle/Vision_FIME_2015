@@ -2,23 +2,23 @@ from PIL import Image
 import sys
 import os.path
 import math
+import random
 import routines.routines as routines
 import routines.auxiliary as auxiliary
 
-mascara1 = [(1, 4, 1), (4, 8, 4), (1, 4, 1)]
-mascara2 = [(1, 2, 1), (2, 4, 2), (1, 2, 1)]
-sobel = ([(-1, 0, 1), (-2, 0, 2), (-1, 0, 1)], [(1, 2, 1), (0, 0, 0), (-1, -2, -1)])
 
 def mask_info(mask):
 	if (type(mask) is tuple) or (type(mask) is list):
 		mask_y = len(mask)
 	else:
 		#Error
+		print "Error1"
 		quit()
 	if (type(mask[0]) is tuple) or (type(mask[0]) is list):
 		mask_x = len(mask[0])
 	else:
 		#Error
+		print "Error2"
 		quit()
 	bool_x = True #Asumir que la longitud x de la mascara es verdadera
 	suma = 0
@@ -33,44 +33,60 @@ def mask_info(mask):
 				break
 		else:
 			#Error
+			print "Error3"
 			quit()
 	if bool_x:
 		return (mask_y, mask_x, suma)
 	else:
 		#Error
+		print "Error4"
 		quit()
 		
-def open_file_mask(name, dir):
+def open_file_mask(file, dir):
 	file_name_list = []
 	file_name_list.append(dir)
-	file_name_list.append(name)
+	file_name_list.append(file)
 	file_name = "".join(file_name_list)
-	mask = []
-	with open(file_name, 'r') as open_file:
-		for line in open_file:
-			mask = []
-			for element in line:
-				if i.isdigit():
-					mask.append(int(i))
-				else:
-					return None
-	return mask
+	print file_name
+	mask_all = []
+	if os.path.isfile(file_name):
+		with open(file_name, 'r') as open_file:
+			for line in open_file:
+				mask = []
+				row_mask = []
+				print "line", line
+				for element in line:
+					if element.isdigit():
+						row_mask.append(int(element))
+					elif element == ",":
+						mask.append(tuple(row_mask))
+						row_mask = []
+				print "mask", mask
+				mask_all.append(mask)
+		return mask_all
+	else:
+		return None
+		
+#http://stackoverflow.com/a/306417
 		
 def define_mask(options):
-	mask_list = []
+	mask = []
 	ext = ".txt"
 	if options[0]:
-		file = options[1]
+		name = options[1]
+		file = []
+		file_list.append(name)
+		file_list.append(ext)
+		file = "".join(file_list)
 		dir = "edge_detection\masks\special\\"
 		mask = open_file_mask(file, dir)
-		print mask
 	else:
 		dir = "edge_detection\masks\\"
 		file_mask = auxiliary.traer_archivos(dir, ext)
 		for file in file_mask:
 			dummy_mask = open_file_mask(file, dir)
-			print dummy_mask
-	return None
+		mask = random.choice(dummy_mask)
+	return mask
 		
 
 
@@ -95,7 +111,6 @@ def aplicar_mascara(image, mask, multiple):
 	if mask == 2:
 		mask_
 	dummy = 0
-	
 	if multiple:
 		pixel_gradient = []
 		gradients = {}
@@ -173,6 +188,7 @@ def aplicar_mascara(image, mask, multiple):
 		gradient_mean = auxiliary.mediana(gradients_list)
 		print gradient_mean
 		print auxiliary.promedio(gradients_list)
+	print new_image
 	return new_image
 	
 def __main__(filename, bool_mask):
@@ -183,14 +199,15 @@ def __main__(filename, bool_mask):
 		options_mask.append(mask_to_use)
 	else:
 		options_mask.append(False)
-	define_mask (options_mask)
+	mask = define_mask (options_mask)
+	print "h23y2", mask
 	imagen_original = Image.open(filename)
 	imagen_original = imagen_original.convert('RGB')
 	imagen_grises = routines.escala_grises(imagen_original)
-	mascara = sobel
-	imagen_mascara = aplicar_mascara(imagen_grises, mascara, True)
+	imagen_mascara = aplicar_mascara(imagen_grises, mask, bool_mask)
 	imagen_grises.show()
 	imagen_mascara.show()
+	print mask
 
 #run in the 'package' directory
 #python -m edge_detection.mascaras ejemplos\shantae.png
@@ -199,6 +216,6 @@ if __name__ == '__main__':
 	if existe:
 		bool_mask = False
 		if len(sys.argv) > 2:
-			if sys.argv[1] == "-s" or sys.argv[1] == "s" or sys.argv[1] == "-S" or sys.argv[1] == "S":
+			if sys.argv[1] == "-m" or sys.argv[1] == "m" or sys.argv[1] == "-M" or sys.argv[1] == "M":
 				bool_mask = True
 		__main__(sys.argv[len(sys.argv) - 1], bool_mask)
