@@ -47,21 +47,18 @@ def open_file_mask(file, dir):
 	file_name_list.append(dir)
 	file_name_list.append(file)
 	file_name = "".join(file_name_list)
-	print file_name
 	mask_all = []
 	if os.path.isfile(file_name):
 		with open(file_name, 'r') as open_file:
 			for line in open_file:
 				mask = []
 				row_mask = []
-				print "line", line
 				for element in line:
 					if element.isdigit():
 						row_mask.append(int(element))
-					elif element == ",":
+					elif element == "," or element == "\n":
 						mask.append(tuple(row_mask))
 						row_mask = []
-				print "mask", mask
 				mask_all.append(mask)
 		return mask_all
 	else:
@@ -188,7 +185,6 @@ def aplicar_mascara(image, mask, multiple):
 		gradient_mean = auxiliary.mediana(gradients_list)
 		print gradient_mean
 		print auxiliary.promedio(gradients_list)
-	print new_image
 	return new_image
 	
 def __main__(filename, bool_mask):
@@ -200,14 +196,12 @@ def __main__(filename, bool_mask):
 	else:
 		options_mask.append(False)
 	mask = define_mask (options_mask)
-	print "h23y2", mask
 	imagen_original = Image.open(filename)
 	imagen_original = imagen_original.convert('RGB')
 	imagen_grises = routines.escala_grises(imagen_original)
 	imagen_mascara = aplicar_mascara(imagen_grises, mask, bool_mask)
 	imagen_grises.show()
 	imagen_mascara.show()
-	print mask
 
 #run in the 'package' directory
 #python -m edge_detection.mascaras ejemplos\shantae.png
