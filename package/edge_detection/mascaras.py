@@ -40,6 +40,7 @@ def mask_info(mask):
 	else:
 		#Error
 		print "Error4"
+		print (mask_y, mask_x, suma)
 		quit()
 		
 def open_file_mask(file, dir):
@@ -53,12 +54,17 @@ def open_file_mask(file, dir):
 			for line in open_file:
 				mask = []
 				row_mask = []
-				for element in line:
-					if element.isdigit():
-						row_mask.append(int(element))
-					elif element == "," or element == "\n":
+				for index in xrange(len(line)):
+					if line[index].isdigit():
+						row_mask.append(int(line[index]))
+						if (index - 1) >= 0:
+							if line[index - 1] == "-":
+								row_mask[len(row_mask) - 1] *= (-1)
+					elif line[index] == "," or line[index] == "\n":
 						mask.append(tuple(row_mask))
 						row_mask = []
+				if len(row_mask) > 0:
+					mask.append(tuple(row_mask))
 				mask_all.append(mask)
 		return mask_all
 	else:
@@ -71,7 +77,7 @@ def define_mask(options):
 	ext = ".txt"
 	if options[0]:
 		name = options[1]
-		file = []
+		file_list = []
 		file_list.append(name)
 		file_list.append(ext)
 		file = "".join(file_list)
@@ -105,6 +111,11 @@ def prueba_colores(imagen):
 	
 	
 def aplicar_mascara(image, mask, multiple):
+	if mask is None:
+		print "Not defined mask"
+		quit()
+	else:
+		print "Mask to use", mask
 	if mask == 2:
 		mask_
 	dummy = 0
