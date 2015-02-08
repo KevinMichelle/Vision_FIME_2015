@@ -1,5 +1,27 @@
 import os
 import math
+import numpy as np
+import matplotlib.pyplot as plt
+
+def dict_to_list(dictio):
+	new_list = []
+	for element in dictio:
+		count = dictio[element]
+		for dummy in xrange(0, count):
+			new_list.append(element)
+	return new_list
+			
+
+def histogram(info):
+	if type(info) is dict:
+		data = dict_to_list(info)
+	elif type(info) is list:
+		data = info
+	mediana = mediana(data)
+	promedio_info = promedio(data)
+	bin_width = 1
+	plt.hist(data, bins=np.arange(min(data), max(data) + bin_width, bin_width))
+	plt.show()
 
 def promedio(lista):
 	suma = 0
@@ -11,6 +33,21 @@ def promedio(lista):
 #Implementacion basada en la descripcion de Wikipedia y la respuesta de Stack Overflow
 #http://en.wikipedia.org/wiki/Median#Medians_for_samples
 #http://stackoverflow.com/questions/24101524/finding-median-of-list-in-python/24101655#24101655
+
+def absolute_deviation(mediana, lista):
+	new_lista = []
+	for element in lista:
+		ad = abs(element - mediana)
+		new_lista.append(ad)
+	return new_lista
+	
+def median_absolute_deviation(lista):
+	median = mediana(lista)
+	abs_dev = absolute_deviation(median, lista)
+	mad = mediana(abs_dev)
+	print "median", median, "mad", mad
+	return mad
+	
 
 def mediana(lista):
 	lista.sort()
