@@ -17,8 +17,6 @@ def histogram(info):
 		data = dict_to_list(info)
 	elif type(info) is list:
 		data = info
-	mediana = mediana(data)
-	promedio_info = promedio(data)
 	bin_width = 1
 	plt.hist(data, bins=np.arange(min(data), max(data) + bin_width, bin_width))
 	plt.show()
@@ -45,12 +43,18 @@ def median_absolute_deviation(lista):
 	median = mediana(lista)
 	abs_dev = absolute_deviation(median, lista)
 	mad = mediana(abs_dev)
-	print "median", median, "mad", mad
+	prom = promedio(lista)
+	prom_n = promedio(abs_dev)
+	print "median", median, "mad", mad, abs_dev[len(abs_dev) - 1], prom, prom_n
 	return mad
 	
 
 def mediana(lista):
-	lista.sort()
+	for i in xrange(0, 10):
+		print lista[i]
+	lista.sort
+	for i in xrange(0, 10):
+		print lista[i]
 	if len(lista) % 2 == 0:
 		suma = lista[(len(lista) / 2) - 1] + lista[len(lista)/2]
 		mediana_par =  math.ceil(suma / 2.0)

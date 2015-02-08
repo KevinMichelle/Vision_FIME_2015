@@ -176,8 +176,8 @@ def aplicar_mascara(image, mask, multiple):
 				new_value = sumatoria / mask_weight
 				new_pixels[x, y] = (new_value, new_value, new_value)
 			else:
-				new_pixels[x, y] = (255, 255, 255)
-				new_value = abs(sumatoria1) + abs(sumatoria2)
+				new_pixels[x, y] = (0, 0, 0)
+				new_value = int(math.pow(abs(sumatoria1) + abs(sumatoria2), 2))
 				if new_value not in gradients:
 					gradients[new_value] = 1
 				else:
@@ -189,14 +189,14 @@ def aplicar_mascara(image, mask, multiple):
 			pixel = new_pixel_gradient[index_pixel]
 			nxp, nyp, nvp = pixel[0], pixel[1], pixel[2]
 			if nvp == 1:
-				new_pixels[nxp, nyp] = (0, 0, 255)
+				new_pixels[nxp, nyp] = (255, 255, 255)
 		print "hola"
 	return new_image
 	
 def edge_detection(gradients, pixel_gradient):
 	new_pixel_gradient = []
 	gradients_list = aux.dict_to_list(gradients)
-	threshold = aux.median_absolute_deviation(gradients_list)
+	threshold = aux.promedio(gradients_list) #dummy value
 	print "umbral", threshold
 	for index_pixel in xrange(0, len(pixel_gradient)):
 		pixel = pixel_gradient[index_pixel]
