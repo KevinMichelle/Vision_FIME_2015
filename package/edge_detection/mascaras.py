@@ -40,9 +40,38 @@ def mask_info(mask):
 		#Error
 		quit()
 		
-def define_masks():
-	file_mask = auxiliary.traer_archivos("edge_detection\masks", ".txt")
-	print file_mask
+def open_file_mask(name, dir):
+	file_name_list = []
+	file_name_list.append(dir)
+	file_name_list.append(name)
+	file_name = "".join(file_name_list)
+	mask = []
+	with open(file_name, 'r') as open_file:
+		for line in open_file:
+			mask = []
+			for element in line:
+				if i.isdigit():
+					mask.append(int(i))
+				else:
+					return None
+	return mask
+		
+def define_mask(options):
+	mask_list = []
+	ext = ".txt"
+	if options[0]:
+		file = options[1]
+		dir = "edge_detection\masks\special\\"
+		mask = open_file_mask(file, dir)
+		print mask
+	else:
+		dir = "edge_detection\masks\\"
+		file_mask = auxiliary.traer_archivos(dir, ext)
+		for file in file_mask:
+			dummy_mask = open_file_mask(file, dir)
+			print dummy_mask
+	return None
+		
 
 
 
@@ -146,7 +175,15 @@ def aplicar_mascara(image, mask, multiple):
 		print auxiliary.promedio(gradients_list)
 	return new_image
 	
-def __main__(filename):
+def __main__(filename, bool_mask):
+	options_mask = []
+	if bool_mask:
+		mask_to_use = sys.argv[2]
+		options_mask.append(True)
+		options_mask.append(mask_to_use)
+	else:
+		options_mask.append(False)
+	define_mask (options_mask)
 	imagen_original = Image.open(filename)
 	imagen_original = imagen_original.convert('RGB')
 	imagen_grises = routines.escala_grises(imagen_original)
@@ -154,12 +191,14 @@ def __main__(filename):
 	imagen_mascara = aplicar_mascara(imagen_grises, mascara, True)
 	imagen_grises.show()
 	imagen_mascara.show()
-	define_masks()
 
 #run in the 'package' directory
 #python -m edge_detection.mascaras ejemplos\shantae.png
 if __name__ == '__main__':
-	print sys.argv[1]
 	existe = auxiliary.existe_archivo(sys.argv)
 	if existe:
-		__main__(sys.argv[len(sys.argv) - 1])
+		bool_mask = False
+		if len(sys.argv) > 2:
+			if sys.argv[1] == "-s" or sys.argv[1] == "s" or sys.argv[1] == "-S" or sys.argv[1] == "S":
+				bool_mask = True
+		__main__(sys.argv[len(sys.argv) - 1], bool_mask)
