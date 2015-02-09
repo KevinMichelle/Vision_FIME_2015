@@ -2,6 +2,7 @@ import os
 import math
 import numpy as np
 import matplotlib.pyplot as plt
+from PIL import Image
 
 def preparar_nombre(nombre):
 	bool_nombre = True
@@ -73,14 +74,33 @@ def mediana(lista):
 	else:
 		return lista[((len(lista) + 1)/2) - 1]
 
-def existe_archivo(argv):
-	if len(argv) > 1:
-		filename = argv[len(argv) - 1]
-		if os.path.isfile(filename):
-			return True
+def existe_archivo(filename):
+	if os.path.isfile(filename):
+		return True
+	else:
+		return False
+		
+def checar_guardar(dir, pos_name, ext):
+	bool_guardar = (False, None)
+	name = dir + pos_name + ext
+	bool_name = preparar_nombre(pos_name)
+	if bool_name:
+		exists_name = existe_archivo(name)
+		if not exists_name:
+			bool_guardar = (True, name)
+				
 		else:
-			print "No existe archivo '{}'".format(filename)
-			return False
+			i = 1
+			new_name = ""
+			while exists_name:
+				new_name = name[0:len(name)-4] + str(i) + ext
+				i += 1
+				exists_name = existe_archivo(new_name)
+			bool_guardar = (True, new_name)
+		#exists_name = aux.existe_archivo(
+	else:
+		print 'Illegal characters in the name: {}'.format(pos_name)
+	return bool_guardar
 		
 #http://stackoverflow.com/a/3964691
 def traer_archivos(dir, file_ext):

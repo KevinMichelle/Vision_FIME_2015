@@ -41,6 +41,7 @@ def mask_info(mask):
 		#Error
 		print "Error4"
 		quit()
+	return None
 		
 def open_file_mask(file, dir):
 	file_name_list = []
@@ -107,6 +108,7 @@ def prueba_colores(imagen):
 					pixeles[x, y]  = (0, 0, 255)
 				elif (x == xs - 1 and y == ys - 1):
 					pixeles[x, y] = (255, 255, 255)
+	return None
 	
 	
 def aplicar_mascara(image, mask, multiple):
@@ -199,7 +201,7 @@ def edge_detection(gradients, pixel_gradient):
 			new_pixel_gradient.append((pixel[0], pixel[1], 1))
 	return new_pixel_gradient
 	
-def __main__(filename, choice_mask):
+def __main__(filename, choice_mask, choie_save):
 	options_mask = []
 	multiple_mask = False
 	if choice_mask[0]:
@@ -214,14 +216,18 @@ def __main__(filename, choice_mask):
 	imagen_original = imagen_original.convert('RGB')
 	imagen_grises = rout.escala_grises(imagen_original)
 	imagen_mascara = aplicar_mascara(imagen_grises, mask, multiple_mask)
-	imagen_grises.show()
-	imagen_mascara.show()
+	if choice_save[0]:
+		bool_save =  aux.checar_guardar("dest\\", choice_save[1], '.png')
+		if bool_save[0]:
+			print "Directory of the new image: {}".format(bool_save[1])
+			imagen_mascara.save(bool_save[1])
+	return None
 
 #run in the 'package' directory
 #python -m edge_detection.mascaras ejemplos\shantae.png
 if __name__ == '__main__':
-	existe = aux.existe_archivo(sys.argv)
-	if existe:
+	exists = aux.existe_archivo(sys.argv[len(sys.argv) - 1])
+	if exists:
 		choise_mask = (None, None)
 		choice_save = (None, None)
 		if len(sys.argv) > 2:
@@ -230,9 +236,9 @@ if __name__ == '__main__':
 				if ar == "-m" or ar == "m" or ar == "-M" or ar == "M":
 					if index_argv < len(sys.argv):
 						choice_mask = (True, sys.argv[index_argv + 1])
-				if ar == "-o" or ar == "o" or ar == "-O" or ar == "O":
+				if ar == "-s" or ar == "S" or ar == "-S" or ar == "S":
 					if index_argv < len(sys.argv):
 						choice_save = (True, sys.argv[index_argv + 1])
 		else:
 			choice_mask, choice_save = (False, None), (False, None)
-		__main__(sys.argv[len(sys.argv) - 1], choice_mask)
+		__main__(sys.argv[len(sys.argv) - 1], choice_mask, choice_save)
