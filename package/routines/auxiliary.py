@@ -3,6 +3,17 @@ import math
 import numpy as np
 import matplotlib.pyplot as plt
 
+def preparar_nombre(nombre):
+	bool_nombre = True
+	for letra in nombre:
+		valor = ord(letra)
+		if not (valor >= 48 and valor <= 57):
+			if not(valor >= 65 and valor <= 90):
+				if not (valor >= 97 and valor <= 122):
+					bool_nombre = False
+					return bool_nombre
+	return bool_nombre
+
 def dict_to_list(dictio):
 	new_list = []
 	for element in dictio:

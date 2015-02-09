@@ -40,7 +40,6 @@ def mask_info(mask):
 	else:
 		#Error
 		print "Error4"
-		print (mask_y, mask_x, suma)
 		quit()
 		
 def open_file_mask(file, dir):
@@ -116,9 +115,6 @@ def aplicar_mascara(image, mask, multiple):
 		quit()
 	else:
 		print "Mask to use", mask
-	if mask == 2:
-		mask_
-	dummy = 0
 	if multiple:
 		pixel_gradient = []
 		gradients = {}
@@ -191,33 +187,33 @@ def aplicar_mascara(image, mask, multiple):
 			nxp, nyp, nvp = pixel[0], pixel[1], pixel[2]
 			if nvp == 1:
 				new_pixels[nxp, nyp] = (255, 0, 0)
-		print "hola"
 	return new_image
 	
 def edge_detection(gradients, pixel_gradient):
 	new_pixel_gradient = []
 	gradients_list = aux.dict_to_list(gradients)
 	threshold = aux.promedio(gradients_list) #dummy value
-	print "umbral", threshold
 	for index_pixel in xrange(0, len(pixel_gradient)):
 		pixel = pixel_gradient[index_pixel]
 		if pixel[2] >= threshold:
 			new_pixel_gradient.append((pixel[0], pixel[1], 1))
 	return new_pixel_gradient
 	
-def __main__(filename, bool_mask):
+def __main__(filename, choice_mask):
 	options_mask = []
-	if bool_mask:
-		mask_to_use = sys.argv[2]
+	multiple_mask = False
+	if choice_mask[0]:
+		mask_to_use = choice_mask[1]
+		multiple_mask = True
 		options_mask.append(True)
 		options_mask.append(mask_to_use)
 	else:
-		options_mask.append(False)
+		options_mask = [False, None]
 	mask = define_mask (options_mask)
 	imagen_original = Image.open(filename)
 	imagen_original = imagen_original.convert('RGB')
 	imagen_grises = rout.escala_grises(imagen_original)
-	imagen_mascara = aplicar_mascara(imagen_grises, mask, bool_mask)
+	imagen_mascara = aplicar_mascara(imagen_grises, mask, multiple_mask)
 	imagen_grises.show()
 	imagen_mascara.show()
 
@@ -226,8 +222,17 @@ def __main__(filename, bool_mask):
 if __name__ == '__main__':
 	existe = aux.existe_archivo(sys.argv)
 	if existe:
-		bool_mask = False
+		choise_mask = (None, None)
+		choice_save = (None, None)
 		if len(sys.argv) > 2:
-			if sys.argv[1] == "-m" or sys.argv[1] == "m" or sys.argv[1] == "-M" or sys.argv[1] == "M":
-				bool_mask = True
-		__main__(sys.argv[len(sys.argv) - 1], bool_mask)
+			for index_argv in xrange(len(sys.argv) - 1):
+				ar = sys.argv[index_argv]
+				if ar == "-m" or ar == "m" or ar == "-M" or ar == "M":
+					if index_argv < len(sys.argv):
+						choice_mask = (True, sys.argv[index_argv + 1])
+				if ar == "-o" or ar == "o" or ar == "-O" or ar == "O":
+					if index_argv < len(sys.argv):
+						choice_save = (True, sys.argv[index_argv + 1])
+		else:
+			choice_mask, choice_save = (False, None), (False, None)
+		__main__(sys.argv[len(sys.argv) - 1], choice_mask)
