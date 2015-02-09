@@ -221,6 +221,7 @@ def __main__(filename, choice_mask, choie_save):
 		if bool_save[0]:
 			print "Directory of the new image: {}".format(bool_save[1])
 			imagen_mascara.save(bool_save[1])
+	imagen_mascara.show()
 	return None
 
 #run in the 'package' directory
