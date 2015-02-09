@@ -228,12 +228,12 @@ def __main__(filename, choice_mask, choie_save):
 if __name__ == '__main__':
 	exists = aux.existe_archivo(sys.argv[len(sys.argv) - 1])
 	if exists:
-		choise_mask = (None, None)
+		choice_mask = (None, None)
 		choice_save = (None, None)
 		if len(sys.argv) > 2:
 			for index_argv in xrange(len(sys.argv) - 1):
 				ar = sys.argv[index_argv]
-				if ar == "-m" or ar == "m" or ar == "-M" or ar == "M":
+				if ar == "-o" or ar == "o" or ar == "-O" or ar == "O":
 					if index_argv < len(sys.argv):
 						choice_mask = (True, sys.argv[index_argv + 1])
 				if ar == "-s" or ar == "S" or ar == "-S" or ar == "S":
