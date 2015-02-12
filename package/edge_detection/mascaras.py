@@ -90,25 +90,6 @@ def define_mask(options):
 			dummy_mask = open_file_mask(file, dir)
 		mask = random.choice(dummy_mask)
 	return mask
-		
-
-
-
-def prueba_colores(imagen):
-	xs, ys = imagen.size
-	pixeles = imagen.load()
-	for y in xrange(ys):
-		for x in xrange(xs):
-			if (y == 0 and x == 0) or (y == 0 and x == xs - 1) or (y == ys - 1 and x == 0) or (y == ys - 1 and x == xs - 1):
-				if (x == 0 and y == 0):
-					pixeles[x, y]  = (255, 0, 0)
-				elif (x == 0 and y == ys - 1):
-					pixeles[x, y]  = (0, 255, 0)
-				elif (x == xs - 1 and y == 0):
-					pixeles[x, y]  = (0, 0, 255)
-				elif (x == xs - 1 and y == ys - 1):
-					pixeles[x, y] = (255, 255, 255)
-	return None
 	
 	
 def aplicar_mascara(image, mask, multiple):
@@ -175,7 +156,8 @@ def aplicar_mascara(image, mask, multiple):
 				new_pixels[x, y] = (new_value, new_value, new_value)
 			else:
 				pixel = pixels[x, y]
-				new_pixels[x, y] = (pixel[0], pixel[1], pixel[2])
+				#new_pixels[x, y] = (pixel[0], pixel[1], pixel[2])
+				new_pixels[x, y] = (255, 255, 255)
 				new_value = int(math.pow(abs(sumatoria1) + abs(sumatoria2), 2))
 				if new_value not in gradients:
 					gradients[new_value] = 1
@@ -185,8 +167,8 @@ def aplicar_mascara(image, mask, multiple):
 	if multiple:
 		new_pixel_gradient = edge_detection(gradients, pixel_gradient)
 		for index_pixel in xrange(0, len(new_pixel_gradient)):
-			pixel = new_pixel_gradient[index_pixel]
-			nxp, nyp, nvp = pixel[0], pixel[1], pixel[2]
+			new_pixel_info = new_pixel_gradient[index_pixel]
+			nxp, nyp, nvp = new_pixel_info[0], new_pixel_info[1], new_pixel_info[2]
 			if nvp == 1:
 				new_pixels[nxp, nyp] = (255, 0, 0)
 	return new_image
@@ -196,14 +178,15 @@ def edge_detection(gradients, pixel_gradient):
 	gradients_list = aux.dict_to_list(gradients)
 	threshold = aux.promedio(gradients_list) #dummy value
 	for index_pixel in xrange(0, len(pixel_gradient)):
-		pixel = pixel_gradient[index_pixel]
-		if pixel[2] >= threshold:
-			new_pixel_gradient.append((pixel[0], pixel[1], 1))
+		pixel_info = pixel_gradient[index_pixel]
+		if pixel_info[2] >= threshold:
+			new_pixel_gradient.append((pixel_info[0], pixel_info[1], 1))
 	return new_pixel_gradient
 	
-def __main__(filename, choice_mask, choie_save):
+def __main__(filename, choice_mask, choice_save):
 	options_mask = []
 	multiple_mask = False
+	print filename
 	if choice_mask[0]:
 		mask_to_use = choice_mask[1]
 		multiple_mask = True
@@ -227,19 +210,5 @@ def __main__(filename, choice_mask, choie_save):
 #run in the 'package' directory
 #python -m edge_detection.mascaras ejemplos\shantae.png
 if __name__ == '__main__':
-	exists = aux.existe_archivo(sys.argv[len(sys.argv) - 1])
-	if exists:
-		choice_mask = (None, None)
-		choice_save = (None, None)
-		if len(sys.argv) > 2:
-			for index_argv in xrange(len(sys.argv) - 1):
-				ar = sys.argv[index_argv]
-				if ar == "-o" or ar == "o" or ar == "-O" or ar == "O":
-					if index_argv < len(sys.argv):
-						choice_mask = (True, sys.argv[index_argv + 1])
-				if ar == "-s" or ar == "S" or ar == "-S" or ar == "S":
-					if index_argv < len(sys.argv):
-						choice_save = (True, sys.argv[index_argv + 1])
-		else:
-			choice_mask, choice_save = (False, None), (False, None)
-		__main__(sys.argv[len(sys.argv) - 1], choice_mask, choice_save)
+	pre_options = aux.pre_argv(sys.argv)
+	__main__(pre_options[0], pre_options[1], pre_options[2])

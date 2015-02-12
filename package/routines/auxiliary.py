@@ -4,6 +4,11 @@ import numpy as np
 import matplotlib.pyplot as plt
 from PIL import Image
 
+def sort_tuple(original_list):
+	new_list = sorted(original_list,key=lambda x: x[1])
+	return new_list
+
+
 def preparar_nombre(nombre):
 	bool_nombre = True
 	for letra in nombre:
@@ -14,6 +19,13 @@ def preparar_nombre(nombre):
 					bool_nombre = False
 					return bool_nombre
 	return bool_nombre
+	
+def dict_to_list_tuple(dictio):
+	new_list = []
+	for element in dictio:
+		new_tuple = (element, dictio[element])
+		new_list.append(new_tuple)
+	return new_list
 
 def dict_to_list(dictio):
 	new_list = []
@@ -62,11 +74,7 @@ def median_absolute_deviation(lista):
 	
 
 def mediana(lista):
-	for i in xrange(0, 10):
-		print lista[i]
-	lista.sort
-	for i in xrange(0, 10):
-		print lista[i]
+	lista.sort()
 	if len(lista) % 2 == 0:
 		suma = lista[(len(lista) / 2) - 1] + lista[len(lista)/2]
 		mediana_par =  math.ceil(suma / 2.0)
@@ -109,4 +117,21 @@ def traer_archivos(dir, file_ext):
 		if file.endswith(file_ext):
 			archivos.append(file)
 	return archivos
-			
+
+def pre_argv(argv):
+	exists = existe_archivo(argv[len(argv) - 1])
+	if exists:
+		choice_option = (None, None)
+		choice_save = (None, None)
+		if len(argv) > 2:
+			for index_argv in xrange(len(argv) - 1):
+				ar = argv[index_argv]
+				if ar == "-o" or ar == "o" or ar == "-O" or ar == "O":
+					if index_argv < len(argv):
+						choice_option = (True, argv[index_argv + 1])
+				if ar == "-s" or ar == "S" or ar == "-S" or ar == "S":
+					if index_argv < len(argv):
+						choice_save = (True, argv[index_argv + 1])
+		else:
+			choice_option, choice_save = (False, None), (False, None)
+	return (argv[len(argv) - 1], choice_option, choice_save)

@@ -35,6 +35,6 @@ def __main__(filename):
 	imagen_promedio.show()
 
 if __name__ == '__main__':
-	existe = auxiliary.existe_archivo(sys.argv)
+	existe = auxiliary.existe_archivo(sys.argv[len(sys.argv) - 1])
 	if existe:
 		__main__(sys.argv[len(sys.argv) - 1])
