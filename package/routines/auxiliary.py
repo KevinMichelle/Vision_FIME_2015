@@ -7,6 +7,16 @@ from PIL import Image
 def sort_tuple(original_list):
 	new_list = sorted(original_list,key=lambda x: x[1])
 	return new_list
+	
+def euclidean_distance(point_a, point_b):
+	if len(point_a) == len(point_b):
+		suma = 0
+		for i in xrange(len(point_a)):
+			aux = point_b[i] - point_a[i]
+			suma += pow(aux, 2)
+		return math.sqrt(suma)	
+	else:
+		print "Error"
 
 
 def preparar_nombre(nombre):
