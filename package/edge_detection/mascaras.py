@@ -170,7 +170,7 @@ def aplicar_mascara(image, mask, multiple):
 			new_pixel_info = new_pixel_gradient[index_pixel]
 			nxp, nyp, nvp = new_pixel_info[0], new_pixel_info[1], new_pixel_info[2]
 			if nvp == 1:
-				new_pixels[nxp, nyp] = (255, 0, 0)
+				new_pixels[nxp, nyp] = (0, 0, 0)
 	return new_image
 	
 def edge_detection(gradients, pixel_gradient):

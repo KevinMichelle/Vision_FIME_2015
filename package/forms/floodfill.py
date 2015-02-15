@@ -23,34 +23,22 @@ def check_colors(image):
 	colors = aux.dict_to_list_tuple(dict_colors)
 	return colors
 
-	#bfs(pixels, x, y, xs, ys, edge_color, background_color, newcolor)
-def bfs(image, remplazo, valor, cola, ys, xs, visitados):
+def bfs(image, queue_neighbors, edge_color, background_color, newcolor):
 	pixels = image.load()
-	(y, x) = cola.pop(0)
-	#print x, y
-	actual = pixels[x, y]
-	#print y, x, actual
-	#print actual, valor
-	#print pixels[x, y]
-	#print "hola"
-	if valor == pixels[x, y]:
-		pixels[x, y] = remplazo
-	else:
-		return None
-	#print pixels[x, y], valor
-	#print pixels[x, y]
+	y, x = queue_neighbors.pop(0)
+	actual_pixel = pixels[x, y]
+	pixels[x, y] = newcolor
 	for dy in xrange(y - 1, y + 2):
 		for dx in xrange(x - 1, x + 2):
-			#print dy, dx, ys, xs
-			if dy >= 0 and dy < ys:
-				if dx >= 0 and dx < xs:
-					candidato = (dy, dx)
-					if candidato not in visitados:
-						contenido = pixels[dx, dy]
-						#print contenido
-						if contenido == valor:
-							cola.append(candidato)
-							visitados[candidato] = 1
+			if ((dy == y - 1) and (dx == x)) or ((dy == y) and (dx == x - 1)) or ((dy == y) and (dx == x + 1)) or ((dy == y + 1) and (dx == x)):
+				if dy >= 0 and dy < ys:
+					if dx >= 0 and dx < xs:
+						candidato = (dy, dx)
+						if candidato not in visitados:
+							contenido = pixels[dx, dy]
+							if contenido == background_color:
+								queue_neighbors.append(candidato)
+								visitados[candidato] = 1
 	return None
 
 def main():
@@ -65,7 +53,7 @@ def cambiar_colores(image):
 			if y >= 0 and y < ys:
 				if x >= 0 and x < xs:
 					color = pixels[x, y]
-					if not color == (255, 0, 0):
+					if not color == (0, 0, 0):
 						pixels[x, y] = (255, 255, 255)
 					else:
 						pixels[x, y] = (0, 0, 0)
@@ -75,20 +63,25 @@ def colorear(image, edge_color, background_color):
 	xs, ys = image.size
 	pixels = image.load()
 	color_list = list()
+	visitados = {}
+	print edge_color, background_color
 	for y in xrange(0, ys):
 		for x in xrange(0, xs):
 			pixel = pixels[x, y]
 			if pixel == background_color:
 				newcolor = rout.new_color()
 				color_list.append(newcolor)
-				bfs(pixels, x, y, xs, ys, edge_color, background_color, newcolor)
-				
-	print "total_colore", len(lista_colores)
+				print newcolor
+				queue_neighbors = list()
+				queue_neighbors.append((y, x))
+				while len(queue_neighbors) > 0:
+					bfs(image, queue_neighbors, edge_color, background_color, newcolor)
+	print "total_colore", len(color_list), color_list
 
 if __name__ == '__main__':
 	#pre_options = aux.pre_argv(sys.argv)
 	#__main__(pre_options[0], pre_options[1], pre_options[2])
-	filename = "samples\\flood.png"
+	filename = "samples\\figuras.png"
 	print filename
 	original_image = Image.open(filename)
 	image = original_image.convert('RGB')
@@ -118,6 +111,6 @@ if __name__ == '__main__':
 		#	bfs(image, remplazo, valor, cola, ys, xs, visitados)
 		#counter += 1
 		break
-	edge_color, background_color = (0, 0, 0), (255, 255, 25)
+	edge_color, background_color = (0, 0, 0), (255, 255, 255)
 	colorear(image, edge_color, background_color)
 	image.show()
