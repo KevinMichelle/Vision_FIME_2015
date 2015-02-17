@@ -175,7 +175,7 @@ def aplicar_mascara(image, mask, multiple):
 	
 def edge_detection(gradients, pixel_gradient):
 	new_pixel_gradient = []
-	gradients_list = aux.dict_to_list(gradients)
+	gradients_list = aux.dict_to_list(gradients, False)
 	threshold = aux.promedio(gradients_list) #dummy value
 	for index_pixel in xrange(0, len(pixel_gradient)):
 		pixel_info = pixel_gradient[index_pixel]

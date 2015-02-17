@@ -17,6 +17,11 @@ def euclidean_distance(point_a, point_b):
 		return math.sqrt(suma)	
 	else:
 		print "Error"
+		
+def max_value_dict(dictio):
+	new_list = dict_to_list(dictio, False)
+	new_list.sort()
+	return new_list[len(new_list)-1]
 
 
 def preparar_nombre(nombre):
@@ -37,18 +42,21 @@ def dict_to_list_tuple(dictio):
 		new_list.append(new_tuple)
 	return new_list
 
-def dict_to_list(dictio):
+def dict_to_list(dictio, bool_key):
 	new_list = []
 	for element in dictio:
-		count = dictio[element]
-		for dummy in xrange(0, count):
+		if bool_key:
 			new_list.append(element)
+		else:
+			count = dictio[element]
+			for dummy in xrange(0, count):
+				new_list.append(element)
 	return new_list
 			
 
 def histogram(info):
 	if type(info) is dict:
-		data = dict_to_list(info)
+		data = dict_to_list(info, False)
 	elif type(info) is list:
 		data = info
 	bin_width = 1

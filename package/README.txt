@@ -1,4 +1,4 @@
-To run this software you need the following Python libraries:
+To run this software you will need the following Python libraries:
 
 	PIL
 	matplotlib
@@ -6,3 +6,4 @@ To run this software you need the following Python libraries:
 	dateutil
 	pyparsing
 	numpy
+	colorsys

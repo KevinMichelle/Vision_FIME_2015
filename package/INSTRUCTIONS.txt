@@ -20,5 +20,5 @@ III - Edge detection
 
 		python -m edge_detection.mascaras -o sobeldg -s NEWIMAGE INPUTFILE
 		
-	NOTE: If you want to try another masks please replace 'sobeldg' with the names of the files of this directory: 
+	NOTE: If you want to try another mask, or create another mask, please replace 'sobeldg' with the name of the file of this mask in this directory: 
 			your_previous_directory\Vision_FIME_2015\package\edge_detection\masks\special
