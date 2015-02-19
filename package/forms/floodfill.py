@@ -1,4 +1,4 @@
-from PIL import Image
+from PIL import Image, ImageDraw
 import sys
 import os.path
 import math
@@ -97,7 +97,6 @@ def enhance_edge(image, bool_edges):
 def flood_fill(image):
 	change_color(image, None, None) #remove pixels that are not white or black
 	image = enhance_edge(image, True) #se crea un nuevo objeto tipo Image, ya es distinto que el que recibe flood_fill
-	image.show()
 	white_color, black_color = (255, 255, 255), (0, 0, 0)
 	xs, ys = image.size
 	pixels = image.load()
@@ -105,6 +104,7 @@ def flood_fill(image):
 	max_color_count = 0
 	background_new_color = ()
 	center_mass = {} #color -> center of mass
+	info_form = {}
 	for y in xrange(0, ys):
 		for x in xrange(0, xs):
 			pixel = pixels[x, y]
@@ -112,6 +112,7 @@ def flood_fill(image):
 				visitados = {}
 				newcolor = rout.gen_color(color_list)
 				color_list.append(newcolor)#generador de colores llamada incompleto
+				visitados[(y, x)] = 1
 				queue_neighbors = list()
 				queue_neighbors.append((y, x))
 				while len(queue_neighbors) > 0:
@@ -122,21 +123,24 @@ def flood_fill(image):
 				if len(visitados) > 0:
 					new_center_mass = center_of_mass(image, visitados)
 					center_mass[newcolor] = new_center_mass
-	print "centro_masas", center_mass
+					info = find_info_form(visitados)
+					info_form[newcolor] = info
 	if background_new_color in center_mass:
 		del center_mass[background_new_color]
-	print "centro_masas", center_mass
+	if background_new_color in info_form:
+		del info_form[background_new_color]
 	change_color(image, background_new_color, white_color) #replace the new back ground color with the white color
 	change_color(image, black_color, white_color)
 	draw_center_mass(image, center_mass)
+	draw_box(image, info_form)
 	return image
 	
-def draw_center_mass(image, center_mass):
+def draw_center_mass(image, color_dic):
 	black_color = (0, 0, 0)
 	xs, ys = image.size
 	pixels = image.load()
-	for color in center_mass:
-		center = center_mass[color]
+	for color in color_dic:
+		center = color_dic[color]
 		y, x = center[0], center[1]
 		for dy in xrange(y - 3, y + 4):
 			if dy >= 0 and dy < ys:
@@ -144,6 +148,24 @@ def draw_center_mass(image, center_mass):
 					if dx >= 0 and dx < xs:
 						pixels[dx, dy] = black_color
 	return None
+	
+def draw_box(image, info_form):
+	black_color = (0, 0, 0)
+	pixels = image.load()
+	xs, ys = image.size
+	for llave in info_form:
+		form = info_form[llave]
+		y1, y2 = form[0]
+		x1, x2 = form[1]
+		pix1, pix2, pix3, pix4 = (x1, y1), (x1, y2), (x2, y1), (x2, y2)
+		draw = ImageDraw.Draw(image)
+		draw.line((pix1, pix3), fill = black_color)
+		draw.line((pix1, pix2), fill = black_color)
+		draw.line((pix4, pix2), fill = black_color)
+		draw.line((pix4, pix3), fill = black_color)
+	return None
+
+			
 	
 def edge_dictio(image):
 	edge_color = (0, 0, 0)
@@ -168,28 +190,38 @@ def edge_dictio(image):
 					edge_id[id] = visitados_lista
 	return edge_id
 	
-def jarvis(image):
-	pixels = image.load()
-	edge_id = edge_dictio(image)
-	for id in edge_id:
-		y, x = [], []
-		edge_points = edge_id[id]
-		for points in edge_points:
-			y.append(points[0])
-		y.sort()
-		lower_y = y[len(y)-1]
-		for points in edge_points:
-			if points[0] == lower_y:
-				x.append(points[1])
-		x.sort()
-		upper_x = x[len(x)-1]
-		print "y, x", (lower_y, upper_x)
+def find_info_form(list_of_pixels):
+	y, x = [], []
+	for pixel in list_of_pixels:
+		y.append(pixel[0])
+		x.append(pixel[1])
+	y.sort()
+	x.sort()
+	y_ = (y[0], y[len(y) - 1])
+	x_ = (x[0], x[len(x) - 1])
+	return (y_, x_)
+		
+
+	#pixels = image.load()
+	#edge_id = edge_dictio(image)
+	#for id in edge_id:
+	#	y, x = [], []
+	#	edge_points = edge_id[id]
+	#	for points in edge_points:
+	#		y.append(points[0])
+	#	y.sort()
+	#	lower_y = y[len(y)-1]
+	#	for points in edge_points:
+	#		if points[0] == lower_y:
+	#			x.append(points[1])
+	##	upper_x = x[len(x)-1]
+		#print "y, x", (lower_y, upper_x)
 	return None
 
 if __name__ == '__main__':
 	#pre_options = aux.pre_argv(sys.argv)
 	#__main__(pre_options[0], pre_options[1], pre_options[2])
-	filename = "samples\\circulos.png"
+	filename = "samples\\figuras_ejemplo.png"
 	print filename
 	original_image = Image.open(filename)
 	image = original_image.convert('RGB')
@@ -221,4 +253,3 @@ if __name__ == '__main__':
 	image = flood_fill(image)
 	image.show()
 	image.save('formas.png')
-	jarvis(image)

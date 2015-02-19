@@ -198,13 +198,13 @@ def __main__(filename, choice_mask, choice_save):
 	imagen_original = Image.open(filename)
 	imagen_original = imagen_original.convert('RGB')
 	imagen_grises = rout.escala_grises(imagen_original)
-	imagen_mascara = aplicar_mascara(imagen_grises, mask, multiple_mask)
+	new_image = aplicar_mascara(imagen_grises, mask, multiple_mask)
 	if choice_save[0]:
 		bool_save =  aux.checar_guardar("dest\\", choice_save[1], '.png')
 		if bool_save[0]:
 			print "Directory of the new image: {}".format(bool_save[1])
-			imagen_mascara.save(bool_save[1])
-	imagen_mascara.show()
+			new_image.save(bool_save[1])
+	new_image.show()
 	return None
 
 #run in the 'package' directory

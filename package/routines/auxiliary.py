@@ -152,4 +152,7 @@ def pre_argv(argv):
 						choice_save = (True, argv[index_argv + 1])
 		else:
 			choice_option, choice_save = (False, None), (False, None)
-	return (argv[len(argv) - 1], choice_option, choice_save)
+		return (argv[len(argv) - 1], choice_option, choice_save)
+	else:
+		print "No existe el archivo"
+		quit()
