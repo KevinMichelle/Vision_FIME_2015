@@ -92,7 +92,7 @@ def define_mask(options):
 	return mask
 	
 	
-def aplicar_mascara(image, mask, multiple):
+def apply_mask(image, mask, multiple):
 	if mask is None:
 		print "Not defined mask"
 		quit()
@@ -127,7 +127,6 @@ def aplicar_mascara(image, mask, multiple):
 	first_x = lower_x
 	last_y = ys - lower_y
 	last_x = xs - lower_x
-
 	
 	for y in xrange(first_y, last_y):
 		for x in xrange(first_x, last_x):
@@ -145,7 +144,6 @@ def aplicar_mascara(image, mask, multiple):
 							if multiple:
 								sumatoria1 += pixels[dx, dy][0] * mask1[column_mask][row_mask]
 								sumatoria2 += pixels[dx, dy][0] * mask2[column_mask][row_mask]
-								#print sumatoria1, dy, dx
 							else:
 								sumatoria += pixels[dx, dy][0] * mask[column_mask][row_mask]
 							row_mask += 1
@@ -156,7 +154,6 @@ def aplicar_mascara(image, mask, multiple):
 				new_pixels[x, y] = (new_value, new_value, new_value)
 			else:
 				pixel = pixels[x, y]
-				#new_pixels[x, y] = (pixel[0], pixel[1], pixel[2])
 				new_pixels[x, y] = (255, 255, 255)
 				new_value = int(math.pow(abs(sumatoria1) + abs(sumatoria2), 2))
 				if new_value not in gradients:
@@ -186,7 +183,6 @@ def edge_detection(gradients, pixel_gradient):
 def __main__(filename, choice_mask, choice_save):
 	options_mask = []
 	multiple_mask = False
-	print filename
 	if choice_mask[0]:
 		mask_to_use = choice_mask[1]
 		multiple_mask = True
@@ -194,11 +190,11 @@ def __main__(filename, choice_mask, choice_save):
 		options_mask.append(mask_to_use)
 	else:
 		options_mask = [False, None]
-	mask = define_mask (options_mask)
+	mask = define_mask(options_mask)
 	imagen_original = Image.open(filename)
 	imagen_original = imagen_original.convert('RGB')
 	imagen_grises = rout.escala_grises(imagen_original)
-	new_image = aplicar_mascara(imagen_grises, mask, multiple_mask)
+	new_image = apply_mask(imagen_grises, mask, multiple_mask)
 	if choice_save[0]:
 		bool_save =  aux.checar_guardar("dest\\", choice_save[1], '.png')
 		if bool_save[0]:
