@@ -51,7 +51,7 @@ def validate_save(directory, filename, extension):
 			dummy = 1
 			new_name = ""
 			while exists_name:
-				new_name = full_filename[0:len(full_filename)-4] + str(dummy) + ext
+				new_name = full_filename[0:len(full_filename)-4] + str(dummy) + extension
 				dummy += 1
 				exists_name = file_exists(new_name)
 			bool_save = (True, new_name)

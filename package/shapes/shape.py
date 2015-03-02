@@ -3,7 +3,7 @@ import sys
 import math
 import random
 import colorsys
-import edge.edge as edge
+import edges.edge as edge
 import utilities.files as files
 import utilities.pix as pix
 import utilities.masks as masks
@@ -70,7 +70,7 @@ def draw_center_mass(image, center):
 		pixels[dx, dy] = black_color
 	return None
 
-def floodfill(image, bool_info):
+def floodfill(image, bool_info, objetive_color):
 	white_color, black_color = (255, 255, 255), (0, 0, 0)
 	xs, ys = image.size
 	pixels = image.load()
@@ -110,8 +110,9 @@ def floodfill(image, bool_info):
 	
 def define_shapes(image, bool_info):
 	mask_to_use = "prewittdg"
-	edge_image = edge.define_edges(image, mask_to_use)
-	shape_image = floodfill(edge_image, bool_info)
+	edge_image = edge.define_edges(image, mask_to_use, True) #enhance edges
+	white_color = (255, 255, 255)
+	shape_image = floodfill(edge_image, bool_info, white_color)
 	return shape_image
 	
 def __main__(filename, choice_info, choice_save):
@@ -124,7 +125,7 @@ def __main__(filename, choice_info, choice_save):
 	shape_image = define_shapes(image, bool_info)
 	shape_image.show()
 	if choice_save[0]:
-		bool_save =  files.validate_save("shape\output\\", choice_save[1], '.png')
+		bool_save =  files.validate_save("shapes\output\\", choice_save[1], '.png')
 		if bool_save[0]:
 			print "Directory of the new image: {}".format(bool_save[1])
 			shape_image.save(bool_save[1])			

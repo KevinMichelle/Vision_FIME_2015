@@ -89,8 +89,7 @@ def mask_pixel_operator(image, mask, bool_normalize):
 	mask_values = find_mask_values(mask)
 	parameters = mask_y_size, mask_x_size #mask size
 	axis_limits = (ys, xs)
-	lower_y, upper_y, lower_x, upper_x = neighbors.neighbors_limits(parameters)
-	limits = lower_y, upper_y, lower_x, upper_x
+	lower_y, upper_y, lower_x, upper_x = neighbors.neighbor_limits(parameters)
 	first_y = lower_y
 	first_x = lower_x
 	last_y = ys - lower_y
@@ -99,10 +98,10 @@ def mask_pixel_operator(image, mask, bool_normalize):
 	for y in xrange(first_y, last_y):
 		for x in xrange(first_x, last_x):
 			pixel = (y, x)
-			neighbor_pixels = neighbors.find_neighbors(pixels, pixel, limits, axis_limits)
+			neighbor_pixels = neighbors.find_neighbors(pixels, pixel, None, axis_limits)
 			new_pixel_value = 0
 			for index in xrange(len(neighbor_pixels)):
-				n_pixel = neighbor_pixels[index][1] #pixel value
+				n_pixel = neighbor_pixels[index][1][0] #pixel value
 				n_mask = mask_values[index]
 				aux = n_pixel * n_mask
 				new_pixel_value += aux
@@ -120,7 +119,8 @@ def apply_mask(image, mask_to_use, bool_normalize):
 		print "Not define mask"
 		quit()
 	else:
-		print "Mask to use", mask
+		if __name__ == '__main__':
+			print "Mask to use", mask
 	new_pixels = mask_pixel_operator(image, mask, bool_normalize)
 	return new_pixels
 	
