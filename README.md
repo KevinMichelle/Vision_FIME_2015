@@ -25,7 +25,12 @@ II - Shape detection
 
 	By default the program only shows the shapes in the new image, but if you add the '-o' option to the command, it will print in the command line interface
 	information about the shapes that were found in the image. Also, the program will draw this information in the new image for better visualization.
-	
+
+III - Line detection
+
+	A basic shape detection needs the following command:
+		
+		python -m lines.line INPUTFILE
 	
 HOW TO SAVE THE NEW IMAGE
 
