@@ -60,13 +60,18 @@ def define_equation_line(image, central_point, gradients, angles):
 		if pixels[oldx, oldy] == black_color:
 			pixeld[oldx, oldy] = white_color
 	parameters = 5, 5
+	image.show()
 	white_black = (True, True) #ignore white and black pixels in the neighborhood, only update white and black pixels
 	image = pix.filter_pixels(image, white_black, True, "mode", parameters)
+	image.show()
 	white_black = (True, False)
 	image = pix.filter_pixels(image, white_black, True, "mode", parameters)
+	image.show()
 	white_black = (True, True)
 	image = pix.filter_pixels(image, white_black, True, "mode", parameters)
+	image.show()
 	image = pix.enhance_pixels(image, True)
+	image.show()
 	return image
 	
 
@@ -100,6 +105,7 @@ def define_lines(image):
 	colors_list = pix.colors_image(image)
 	white_color, black_color = (255, 255, 255), (0, 0, 0)
 	visited_pixels = {}
+	image.show()
 	for y in xrange(ys):
 		for x in xrange(xs):
 			pixel = (y, x)
@@ -113,6 +119,7 @@ def define_lines(image):
 					queue_neighbors.append(pixel)
 					while len(queue_neighbors) > 0:
 						bfs.bfs(image, queue_neighbors, pixel_value, newcolor, visited_pixels)
+					image.show()
 	return image
 
 def __main__(filename, choice_info, choice_save):
