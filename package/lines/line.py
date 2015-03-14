@@ -2,7 +2,6 @@ from PIL import Image, ImageDraw
 import sys
 import math
 import edges.edge as edge
-import shapes.shape as shape
 import utilities.pix as pix
 import utilities.files as files
 import utilities.statistics as statistics
@@ -10,19 +9,11 @@ import utilities.structures as structures
 import utilities.colors as colors
 import utilities.neighbors as neighbors
 import utilities.bfs as bfs
+import utilities.gradients_angles as gradients_angles
 	
 
-def discretize_angle(discret_angles, angle):
-	max_distance = math.pi
-	new_angle = 0.0
-	for discret_angle in discret_angles:
-		distance_angle = statistics.euclidean_distance(angle, discret_angle)
-		if distance_angle <= max_distance:
-			max_distance = distance_angle
-			new_angle = discret_angle
-	return new_angle
-	
-def define_angles(angles, threshold):
+#line function only
+def define_line_angles(angles, threshold):
 	new_angles = {}
 	colors_list = []
 	for angle in angles:
@@ -45,20 +36,38 @@ def define_equation_line(image, central_point, gradients, angles):
 	black_color, white_color = (0, 0, 0), (255, 255, 255)
 	equation_line = {}
 	pixels = image.load()
-	contador =  0
-	for gradient in gradients:
-		contador += 1
+	for gradient in gradients: #gradient -> y, x
 		oldy, oldx = gradient
 		angle =  gradients[gradient][1]
 		y, x = oldy - central_point[0], oldx - central_point[1]
-		equation = y*math.sin(angle)
-		if equation not in equation_line:
-			equation_line[equation] = 1
+		rho = abs(int(x*math.cos(angle) + y*math.sin(angle)))
+		aux = angle, rho
+		if aux not in equation_line:
+			equation_line[aux] = 1
 		else:
-			equation_line[equation] += 1
+			equation_line[aux] += 1
 		pixels[oldx, oldy] = angles[angle]
 		if pixels[oldx, oldy] == black_color:
 			pixeld[oldx, oldy] = white_color
+	print equation_line
+	suma = 0
+	miau = []
+	for i in equation_line:
+		miau.append(equation_line[i])
+		suma += equation_line[i]
+	print suma
+	print miau, "hola"
+	prom = statistics.average(miau)
+	print prom
+	nuevos = []
+	for i in equation_line:
+		if equation_line[i] >= prom:
+			if i not in nuevos:
+				nuevos.append(i)
+	print nuevos
+	print len(nuevos)
+	for i in nuevos:
+		print i
 	parameters = 5, 5
 	image.show()
 	white_black = (True, True) #ignore white and black pixels in the neighborhood, only update white and black pixels
@@ -75,29 +84,18 @@ def define_equation_line(image, central_point, gradients, angles):
 	return image
 	
 
+	
 def define_lines(image):
 	mask_to_use = "prewittdg"
 	gradients = edge.find_edges(image, mask_to_use, False)
 	edge_image = edge.define_edges(image, mask_to_use, False)
-	angles = {}
-	pi = math.pi
 	xs, ys = edge_image.size
 	central_point = (ys/2.0), (xs/2.0)
-	#discret_angles = [0, pi/8.0, pi/4.0, (3.0*pi)/8.0, pi/2.0, (5.0*pi)/8.0, (3*pi)/4.0, (7.0*pi)/8.0, pi]
-	discret_angles = [0, pi/4.0, pi/2.0,(3*pi)/4.0, pi]
-	for gradient in gradients:
-		aux_angle = gradients[gradient][1]
-		angle = aux_angle % math.pi
-		new_angle = discretize_angle(discret_angles, angle)
-		gradients[gradient][1] = new_angle
-		if new_angle not in angles:
-			angles[new_angle] = 1
-		else:
-			angles[new_angle] += 1
+	angles = gradients_angles.define_angles(gradients, 1)
 	counter_angles = structures.dict_to_list(angles, False, False)
 	average_counter = statistics.average(counter_angles)
 	median_counter = statistics.median(counter_angles)
-	new_angles = define_angles(angles, average_counter)
+	new_angles = define_line_angles(angles, average_counter)
 	lines_gradients = define_lines_gradients(gradients, new_angles)
 	image = define_equation_line(edge_image, central_point, lines_gradients, new_angles)
 	xs, ys = image.size
@@ -119,7 +117,6 @@ def define_lines(image):
 					queue_neighbors.append(pixel)
 					while len(queue_neighbors) > 0:
 						bfs.bfs(image, queue_neighbors, pixel_value, newcolor, visited_pixels)
-					image.show()
 	return image
 
 def __main__(filename, choice_info, choice_save):

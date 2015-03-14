@@ -49,21 +49,22 @@ def find_edges(image, mask_to_use, bool_normalize):
 			edge_gradients[gradient_key] = gradient_info
 	return edge_gradients
 	
-def draw_edges(image, edge_gradients):
+def draw_edges(image, edge_gradients, bool_new):
 	black_color = (0, 0, 0)
 	pixels = image.load()
 	xs, ys = image.size
-	new_image = Image.new("RGB", image.size, "white")
-	new_pixels = new_image.load()
+	if bool_new:
+		image = Image.new("RGB", image.size, "white")
+		pixels = image.load()
 	for gradient_key in edge_gradients:
 		y, x = gradient_key
-		new_pixels[x, y] = black_color
-	return new_image
+		pixels[x, y] = black_color
+	return image
 	
 def define_edges(image, mask_to_use, bool_enhance):
 	bool_normalize = False
 	edge_gradients = find_edges(image, mask_to_use, bool_normalize)
-	edge_image = draw_edges(image, edge_gradients)
+	edge_image = draw_edges(image, edge_gradients, True) #new image
 	if bool_enhance:
 		enhance_edge_image = pix.enhance_pixels(edge_image, True)
 		return enhance_edge_image

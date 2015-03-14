@@ -13,14 +13,14 @@ import utilities.bfs as bfs
 
 #http://effbot.org/imagingbook/imagedraw.htm
 def draw_shapes_info(image, shapes_info):
-	black_color = (0, 0, 0)
+	black_color = (30, 30, 30) #almost black color
 	pixels = image.load()
 	xs, ys = image.size
 	total = xs * ys
 	print
 	for shape_key in shapes_info:
 		info = shapes_info[shape_key]
-		shape_limits, shape_center, shape_size, shape_color = info[0], info[1], info[2], info[3]
+		shape_limits, shape_center, shape_size, shape_color = info[0], info[1], info[2], shape_key #shape_key -> color
 		percentage = round((float(shape_size) * 100.0) / float(total), 2)
 		if percentage > 0.0:
 			text = "{} %".format(percentage)
@@ -36,7 +36,7 @@ def draw_shapes_info(image, shapes_info):
 			center_y, center_x = shape_center[0], shape_center[1]
 			draw.text((center_x, center_y + 10), text, fill=black_color)
 			print "Figure with color {}, center of mass {}, percentage in the image {}%".format(shape_color, shape_center, percentage)
-	return None
+	return image
 	
 #http://stackoverflow.com/a/22620206
 def center_of_mass(image, pixel_list):
@@ -59,7 +59,7 @@ def find_shape_limits(pixels_list):
 	return (y_, x_)
 	
 def draw_center_mass(image, center):
-	black_color = (0, 0, 0)
+	black_color = (30, 30, 30) #almost black color
 	xs, ys = image.size
 	pixels = image.load()
 	y, x = center[0], center[1]
@@ -70,7 +70,9 @@ def draw_center_mass(image, center):
 		pixels[dx, dy] = black_color
 	return None
 
-def floodfill(image, bool_info, objetive_color):
+def floodfill(image):
+	mask_to_use = "prewittdg"
+	image = edge.define_edges(image, mask_to_use, True) #enhance edges
 	white_color, black_color = (255, 255, 255), (0, 0, 0)
 	xs, ys = image.size
 	pixels = image.load()
@@ -97,22 +99,20 @@ def floodfill(image, bool_info, objetive_color):
 				if len(visited_pixel) > 0:
 					new_center_mass = center_of_mass(image, visited_pixel)
 					shape_limits = find_shape_limits(visited_pixel)
-					shapes_info[newcolor] = (shape_limits, new_center_mass, len(visited_pixel), newcolor)
+					shapes_info[newcolor] = (shape_limits, new_center_mass, len(visited_pixel))
 	if background_new_color in shapes_info:
 		del shapes_info[background_new_color]
 	image_size = (ys, xs)
 	pix.change_color(pixels, background_new_color, white_color, image_size)
 	pix.change_color(pixels, black_color, white_color, image_size)
-	if bool_info:
-		draw_shapes_info(image, shapes_info)
-	return image
+	return image, shapes_info
 
 	
-def define_shapes(image, bool_info):
-	mask_to_use = "prewittdg"
-	edge_image = edge.define_edges(image, mask_to_use, True) #enhance edges
-	white_color = (255, 255, 255)
-	shape_image = floodfill(edge_image, bool_info, white_color)
+def define_shape(image, bool_info):
+	shape_image_info = floodfill(image, bool_info)
+	shape_image, shapes_info = shape_image_info[0], shape_image_info[1]
+	if bool_info:
+		shape_image = draw_shapes_info(image, shapes_info)
 	return shape_image
 	
 def __main__(filename, choice_info, choice_save):
