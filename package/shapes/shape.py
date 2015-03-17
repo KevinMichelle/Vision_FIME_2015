@@ -110,7 +110,7 @@ def floodfill(image):
 	
 def define_shape(image, bool_info):
 	shape_image_info = floodfill(image, bool_info)
-	shape_image, shapes_info = shape_image_info[0], shape_image_info[1]
+	shape_image, shape_info = shape_image_info[0], shape_image_info[1]
 	if bool_info:
 		shape_image = draw_shapes_info(image, shapes_info)
 	return shape_image

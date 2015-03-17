@@ -1,5 +1,14 @@
 import math
 
+def standard_deviation(elements):
+	n = len(elements)
+	average_sample = average(elements)
+	suma = 0
+	for element in elements:
+		suma += math.pow(element - average_sample, 2)
+	aux = (1.0/(n - 1.0)) * (suma)
+	return math.sqrt(aux)
+
 def average(elements):
 	new_sum = 0
 	for element in elements:

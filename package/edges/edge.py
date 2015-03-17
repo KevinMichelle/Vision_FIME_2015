@@ -28,7 +28,7 @@ def find_gradients(image, mask_to_use, bool_normalize):
 		gradient_value = int(math.pow(abs(x_value) + abs(y_value), 2))
 		gradient_angle = math.atan2(y_value, x_value)
 		if gradient_key not in gradients:
-			gradients[gradient_key] = [gradient_value, gradient_angle]
+			gradients[gradient_key] = [gradient_value, gradient_angle, y_value, x_value]
 	return gradients
 	
 def find_edges(image, mask_to_use, bool_normalize):
@@ -52,7 +52,6 @@ def find_edges(image, mask_to_use, bool_normalize):
 def draw_edges(image, edge_gradients, bool_new):
 	black_color = (0, 0, 0)
 	pixels = image.load()
-	xs, ys = image.size
 	if bool_new:
 		image = Image.new("RGB", image.size, "white")
 		pixels = image.load()
