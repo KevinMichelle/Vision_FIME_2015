@@ -35,7 +35,7 @@ def define_circles(image):
 					edge_shape[check] = gradients[check]
 		if len(edge_shape) == 0:
 			print "Weird bug"
-			quit()
+			break
 		angles = gradients_angles.define_angles(edge_shape, 2)
 		frec_angles = structures.dict_to_list(angles, False, False)
 		average_frec_angle = statistics.average(frec_angles)
