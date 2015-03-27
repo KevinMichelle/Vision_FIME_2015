@@ -26,9 +26,10 @@ def find_gradients(image, mask_to_use, bool_normalize):
 	for gradient_key in gradients_x: #gradient_key -> (y, x)
 		x_value, y_value = gradients_x[gradient_key], gradients_y[gradient_key]
 		gradient_value = int(math.pow(abs(x_value) + abs(y_value), 2))
-		gradient_angle = math.atan2(y_value, x_value)
+		gradient_angle = math.atan2(x_value, y_value)
+		slope_angle = math.atan2(y_value, x_value) #i hope that i don't cause any bug
 		if gradient_key not in gradients:
-			gradients[gradient_key] = [gradient_value, gradient_angle, y_value, x_value]
+			gradients[gradient_key] = [gradient_value, gradient_angle, y_value, x_value, slope_angle]
 	return gradients
 	
 def find_edges(image, mask_to_use, bool_normalize):

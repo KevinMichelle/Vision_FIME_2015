@@ -43,17 +43,17 @@ def define_circles(image):
 		if average_frec_angle > standard_deviation_frec_angle:
 			print "\nMAYBE THIS SHAPE IS A CIRCLE"
 			for edge_pixel in edge_shape:
-				y_aux, x_aux = edge_pixel
-				y = int(round((ys / 2) - y_aux))
-				x = int(round(x_aux - (xs / 2)))
+				y_aux, x_aux = edge_pixel #pixel coordinates
+				y = int(round((ys / 2) - y_aux)) #real coordinates
+				x = int(round(x_aux - (xs / 2))) #real coordinates
 				g = edge_shape[edge_pixel][0]
 				gy = edge_shape[edge_pixel][2]
 				gx = edge_shape[edge_pixel][3]
 				cos_angle, sin_angle = (gx/g), (gy/g)
 				radius = statistics.euclidean_distance(center, edge_pixel)
 				y_circle_aux, x_circle_aux = int((y - (radius * sin_angle))), int((x - (radius * cos_angle))) #according the origin in a cartesian plane
-				y_circle = int(round((ys/2.0) - y_circle_aux))
-				x_circle = int(round(x_circle_aux + (xs/2.0)))
+				y_circle = int(round((ys/2.0) - y_circle_aux)) #acoordin to the pixels coordinates
+				x_circle = int(round(x_circle_aux + (xs/2.0))) #acoordin to the pixels coordinates
 				key_accumulator = (y_circle, x_circle)
 				if (y_circle >= 0 and y_circle < ys) and (x_circle >= 0 and x_circle < xs):
 					pixels[x_circle, y_circle] = (255, 0, 0)
