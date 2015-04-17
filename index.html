@@ -20,7 +20,7 @@
     <header>
       <div class="inner">
         <h1>Vision FIME 2015</h1>
-        <h2>Pruebas</h2>
+        <h2>Sitio web donde muestro mis avances de la clase de Visión Computacional impartida por la doctora Elisa Schaeffer</h2>
         <a href="https://github.com/KevinMichelle/Vision_FIME_2015" class="button"><small>View project on</small> GitHub</a>
       </div>
     </header>
@@ -28,53 +28,82 @@
     <div id="content-wrapper">
       <div class="inner clearfix">
         <section id="main-content">
-          <p>Hi, this software implements many function of image processing functions, if you want to try a special function please read this document.</p>
+          <h1>
+<a id="intro" class="anchor" href="#intro" aria-hidden="true"><span class="octicon octicon-link"></span></a>INTRO</h1>
 
-<pre><code>-- All commands must be run in the 'package' directory --
+<p>Hi, this software implements many function of image processing functions, if you want to try a special function please read this document.</p>
 
---If it is desired save the new image, please read at the end of this document--
+<p>All commands must be run in the 'package' directory inside this repository.</p>
+
+<h1>
+<a id="whats-new-on-the-repository" class="anchor" href="#whats-new-on-the-repository" aria-hidden="true"><span class="octicon octicon-link"></span></a>WHAT'S NEW ON THE REPOSITORY</h1>
+
+<p>Circle detection (Improved!)  </p>
+
+<p><img src="https://github.com/KevinMichelle/Vision_FIME_2015/blob/master/package/circles/output/sample1.png" alt="Circle"></p>
+
+<p>Ellipse detection (Improved!)  </p>
+
+<p><img src="https://github.com/KevinMichelle/Vision_FIME_2015/blob/master/package/ellipses/output/sample1.png" alt="Ellipse"></p>
+
+<p>Hole detection (New!)  </p>
+
+<p><img src="https://github.com/KevinMichelle/Vision_FIME_2015/blob/master/package/holes/output/sample1.png" alt="Hole"></p>
+
+<h1>
+<a id="how-to-save-the-new-image" class="anchor" href="#how-to-save-the-new-image" aria-hidden="true"><span class="octicon octicon-link"></span></a>HOW TO SAVE THE NEW IMAGE</h1>
+
+<p>If you want to save the new image please add the '-s' option and later the name of the new file in the command that you run.</p>
+
+<pre><code>python -m edges.edge -s NEWNAME INPUTFILE
 </code></pre>
 
-<p>I - Edge detection</p>
+<p>The new image will be saved in the 'output' directory inside the directory where is located the main function of the program that was executed.</p>
 
-<pre><code>A basic edge detection needs the following command:
+<p>For example, in the previous command the new image will be saved in this directory:</p>
 
-    python -m edges.edge INPUTFILE
-
-By default the program use the Sobel masks. 
-
-If you want to try another mask, please add the '-o' option and later the name of the mask according to the filenames of this directory: 
-    your_previous_directory\Vision_FIME_2015\package\utilities\masks\special\
-
-Also, you can add new masks (only DG masks) in this directory following the examples.
+<pre><code>your_previous_directory\Vision_FIME_2015\package\edges\output\NEWNAME.png
 </code></pre>
 
-<p>II - Shape detection</p>
+<p><strong>I - Edge detection</strong></p>
 
-<pre><code>A basic shape detection needs the following command:
-
-    python -m shapes.shape INPUTFILE
-
-By default the program only shows the shapes in the new image, but if you add the '-o' option to the command, it will print in the command line interface
-information about the shapes that were found in the image. Also, the program will draw this information in the new image for better visualization.
+<pre><code>python -m edges.edge INPUTFILE
 </code></pre>
 
-<p>III - Line detection</p>
+<p>By default the program use the Sobel masks. If you want to try another mask, please add the '-o' option and later the name of the mask according to th filenames of this directory: </p>
 
-<pre><code>A basic shape detection needs the following command:
-
-    python -m lines.line INPUTFILE
+<pre><code>your_previous_directory\Vision_FIME_2015\package\utilities\masks\special\
 </code></pre>
 
-<p>HOW TO SAVE THE NEW IMAGE</p>
+<p>Also, you can add new masks (only DG masks, sorry!) if you want.</p>
 
-<pre><code>If you want to save the new image please add the '-s' option and later the name of the new file in the command that you run.
+<p><strong>II - Shape detection</strong></p>
 
-    python -m edges.edge -s NEWNAME INPUTFILE
+<pre><code>python -m shapes.shape INPUTFILE
+</code></pre>
 
-The new image will be saved in the 'output' directory inside the directory where is located the main function of the program that was executed.
-For example, in the previous command the new image will be saved in this directory:
-    your_previous_directory\Vision_FIME_2015\package\edges\output\
+<p>By default the program only shows the shapes in the new image, but if you add the '-o' option to the command, it will print in the command line interface information about the shapes that were found in the image. </p>
+
+<p>Also, the program will draw this information in the new image for better visualization.</p>
+
+<p><strong>III - Line detection</strong></p>
+
+<pre><code>python -m lines.line INPUTFILE
+</code></pre>
+
+<p><strong>IV - Circle detection</strong></p>
+
+<pre><code>python -m circles.circle INPUTFILE
+</code></pre>
+
+<p><strong>V - Ellipse detection</strong></p>
+
+<pre><code>python -m ellipses.ellipse INPUTFILE
+</code></pre>
+
+<p><strong>VI - Hole detection</strong></p>
+
+<pre><code>python -m holes.hole INPUTFILE
 </code></pre>
         </section>
 
