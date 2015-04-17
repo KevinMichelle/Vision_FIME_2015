@@ -12,7 +12,8 @@ import utilities.neighbors as neighbors
 import utilities.voting as voting
 import lines.line as line
 import utilities.gradients_angles as gradients_angles
-import datetime
+
+#Hello
 
 #http://en.wikipedia.org/wiki/Slope Slope info / Info de pendientes
 #http://www.aishack.in/tutorials/converting-lines-from-normal-to-slopeintercept-form/ Normal form equation to slope equation
