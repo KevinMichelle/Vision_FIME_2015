@@ -1,17 +1,19 @@
+#INTRO
+
 Hi, this software implements many function of image processing functions, if you want to try a special function please read this document.
 
 All commands must be run in the 'package' directory inside this repository.
 
-*WHAT'S NEW ON THE REPOSITORY*
+#WHAT'S NEW ON THE REPOSITORY#
 
-Circle detection (Improved!)
+Circle detection (Improved!)__
 ![Circle](https://github.com/KevinMichelle/Vision_FIME_2015/blob/master/package/circles/output/sample1.png)
-Ellipse detection (Improved!)
+Ellipse detection (Improved!)__
 ![Ellipse](https://github.com/KevinMichelle/Vision_FIME_2015/blob/master/package/ellipses/output/sample1.png)
-Hole detection (New!)
+Hole detection (New!)__
 ![Hole](https://github.com/KevinMichelle/Vision_FIME_2015/blob/master/package/holes/output/sample1.png)
 	
-**HOW TO SAVE THE NEW IMAGE**
+#HOW TO SAVE THE NEW IMAGE
 
 If you want to save the new image please add the '-s' option and later the name of the new file in the command that you run.
 
@@ -23,7 +25,7 @@ For example, in the previous command the new image will be saved in this directo
 
 	your_previous_directory\Vision_FIME_2015\package\edges\output\
 
-I - Edge detection
+**I - Edge detection**
 
 	python -m edges.edge INPUTFILE
 	
@@ -33,7 +35,7 @@ By default the program use the Sobel masks. If you want to try another mask, ple
 	
 Also, you can add new masks (only DG masks, sorry!) if you want.
 
-II - Shape detection
+**II - Shape detection**
 
 	python -m shapes.shape INPUTFILE
 
@@ -41,18 +43,18 @@ By default the program only shows the shapes in the new image, but if you add th
 	
 Also, the program will draw this information in the new image for better visualization.
 
-III - Line detection
+**III - Line detection**
 
 	python -m lines.line INPUTFILE
 
-IV - Circle detection
+**IV - Circle detection**
 
 	python -m circles.circle INPUTFILE
 	
-V - Ellipse detection
+**V - Ellipse detection**
 
 	python -m ellipses.ellipse INPUTFILE
 	
-VI - Hole detection
+**VI - Hole detection**
 
 	python -m holes.hole INPUTFILE
