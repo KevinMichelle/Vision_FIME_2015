@@ -6,11 +6,11 @@ All commands must be run in the 'package' directory inside this repository.
 
 #WHAT'S NEW ON THE REPOSITORY#
 
-Circle detection (Improved!)__
+Circle detection (Improved!) __
 ![Circle](https://github.com/KevinMichelle/Vision_FIME_2015/blob/master/package/circles/output/sample1.png)
-Ellipse detection (Improved!)__
+Ellipse detection (Improved!) __
 ![Ellipse](https://github.com/KevinMichelle/Vision_FIME_2015/blob/master/package/ellipses/output/sample1.png)
-Hole detection (New!)__
+Hole detection (New!) __
 ![Hole](https://github.com/KevinMichelle/Vision_FIME_2015/blob/master/package/holes/output/sample1.png)
 	
 #HOW TO SAVE THE NEW IMAGE
