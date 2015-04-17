@@ -38,4 +38,12 @@ III - Line detection
 
 IV - Circle detection
 
-	python -m circles.line INPUTFILE
+	python -m circles.circle INPUTFILE
+	
+V - Ellipse detection
+
+	python -m ellipses.ellipse INPUTFILE
+	
+VI - Hole detection
+
+	python -m holes.hole INPUTFILE
