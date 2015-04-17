@@ -150,18 +150,7 @@ def define_holes(image):
 	check_size_holes(shapes_info_holes)
 	holes_image = shape.draw_shapes_info(image, shapes_info_holes, False)
 	return holes_image
-	
-def draw_holes(list_of_holes, image, color):
-	pixels = image.load()
-	for hole in list_of_holes:
-		y, x = hole
-		pixels[x, y] = color
-	image.show()
-	return None
-	
-	
-def find_holes():
-	return None
+
 
 def __main__(filename, choice_info, choice_save):
 	bool_info = False
