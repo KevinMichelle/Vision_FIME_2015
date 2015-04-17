@@ -3,58 +3,12 @@ import math
 import utilities.neighbors as neighbors
 import utilities.statistics as statistics
 
-def filter_pixels(image, white_black, rgb, option, parameters):
-	black_color, white_color = (0, 0, 0), (255, 255, 255)
+#https://www.daniweb.com/software-development/python/code/216637/resize-an-image-python
+def resize_image(image, factor):
 	xs, ys = image.size
-	pixels = image.load()
-	axis_limits = (ys, xs)
-	new_image = image.copy()
-	new_pixels = new_image.load()
-	for y in xrange(ys):
-		for x in xrange(xs):
-			pixel = (y, x)
-			pixel_value = pixels[x, y]
-			neighbor_pixels = neighbors.find_neighbors(pixels, pixel, parameters, axis_limits)
-			neighbor_values = []
-			for pixel_info in neighbor_pixels:
-				if rgb:
-					neighbor_pixel_value = pixel_info[1]
-				else:
-					neighbor_pixel_value = pixel_info[1][0]
-				if white_black[0]:
-					if neighbor_pixel_value != (255, 255, 255) and neighbor_pixel_value != (0, 0, 0):
-						neighbor_values.append(neighbor_pixel_value)
-				else:
-					neighbor_values.append(neighbor_pixel_value)
-			if rgb:
-				red_values, green_values, blue_values = [], [], []
-				new_red, new_green, new_blue = None, None, None
-				for color in neighbor_values:
-					red, green, blue = color[0], color[1], color[2]
-					red_values.append(red)
-					green_values.append(green)
-					blue_values.append(blue)
-				if len(red_values) > 0 and len(green_values) > 0 and len(blue_values) > 0:
-					if option == "max":
-						new_red = max(red_values)
-						new_green = max(green_values)
-						new_blue = max(blue_values)
-					elif option == "mode":
-						new_value = statistics.mode(neighbor_values)
-						new_red, new_green, new_blue = new_value[0], new_value[1], new_value[2]
-				if new_red is not None and new_green is not None and new_blue is not None:
-					if white_black[1]:
-						if pixel_value == white_color or pixel_value == black_color:
-							new_pixels[x, y] = (new_red, new_green, new_blue)
-					else:
-						if pixel_value != white_color and pixel_value != black_color:
-							new_pixels[x, y] = (new_red, new_green, new_blue)
-						
-			else:
-				print "Por implementar"
+	ys, xs = int(ys * factor), int(xs * factor)
+	new_image = image.resize((xs, ys), Image.ANTIALIAS)
 	return new_image
-	
-	
 
 def enhance_pixels(image, bool_control):
 	black_color, white_color = (0, 0, 0), (255, 255, 255)
@@ -108,7 +62,34 @@ def colors_image(image):
 			if pixel_value not in colors:
 				colors.append(pixel_value)
 	return colors
-			
+	
+def frec_colors(image):
+	frec = {}
+	list_of_colors = colors_image(image)
+	xs, ys = image.size
+	pixels = image.load()
+	for y in xrange(ys):
+		for x in xrange(xs):
+			pixel_value = pixels[x, y]
+			if pixel_value in list_of_colors:
+				if pixel_value not in frec:
+					frec[pixel_value] = 1
+				else:
+					frec[pixel_value] += 1
+	return frec
+	
+def max_color(image, frec_colors):
+	aux = 0
+	max_color_list = []
+	for color in frec_colors:
+		frec = frec_colors[color]
+		if frec > aux:
+			aux = frec
+	for color in frec_colors:
+		frec = frec_colors[color]
+		if frec == aux:
+			max_color_list.append(color)
+	return max_color_list
 	
 def grayscale_image(image):
 	xs, ys = image.size
@@ -130,3 +111,33 @@ def change_pixels(image, pixels):
 		y, x = pixel_coordinates
 		new_pixels[x, y] = (pixel_value, pixel_value, pixel_value)
 	return new_image
+	
+def draw_pixels_color(list_of_pixels, pixels, color, ys, xs):
+	for pix in list_of_pixels:
+		y, x = pix
+		if y >= 0 and y <ys and x >= 0 and x < xs:
+			pixels[x, y] = color
+	return None
+	
+def draw_point(point, pixels):
+	if point is not None:
+		if len(point) == 2:
+			y, x = point
+			pixels[x, y] = (255, 0, 0)
+	return None
+	
+def getYCoordinate(y, ys):
+	new_y = float((ys/2.0) - y)
+	return new_y
+
+def getXCoordinate(x, xs):
+	new_x = float(x - (xs/2.0))
+	return new_x
+	
+def getYPixel(y, ys):
+	new_y = int((ys/2.0) - y)
+	return new_y
+
+def getXPixel(x, xs):
+	new_x = int(x + (xs/2.0))
+	return new_x

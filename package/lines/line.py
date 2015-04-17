@@ -48,7 +48,7 @@ def define_equation_line(image, central_point, gradients, angles):
 			equation_line[aux] += 1
 		pixels[oldx, oldy] = angles[angle]
 		if pixels[oldx, oldy] == black_color:
-			pixeld[oldx, oldy] = white_color
+			pixels[oldx, oldy] = white_color
 	print equation_line
 	suma = 0
 	miau = []
@@ -133,6 +133,90 @@ def __main__(filename, choice_info, choice_save):
 			print "Directory of the new image: {}".format(bool_save[1])
 			lines_image.save(bool_save[1])			
 	return None
+	
+def find_intersection(info_a, info_b, ys, xs):
+	a, yap, xap, alfa = info_a[0], info_a[1], info_a[2], info_a[3]
+	b, ybp, xbp, beta = info_b[0], info_b[1], info_b[2], info_b[3]
+	ya, xa, yb, xb = pix.getYCoordinate(yap, ys), pix.getXCoordinate(xap, xs), pix.getYCoordinate(ybp, ys), pix.getXCoordinate(xbp, xs)
+	aux = ((math.sin(alfa) * math.cos(beta)) - (math.sin(beta) * math.cos(alfa)))
+	if aux != 0 and math.sin(alfa) != 0:
+		x = (b * math.sin(alfa) - a * math.sin(beta)) / aux
+		y = (a - x * math.cos(alfa)) / math.sin(alfa)
+		yp, xp = pix.getYPixel(y, ys), pix.getXPixel(x, xs)
+	else:
+		yp,xp = None, None
+	return (yp, xp)
+	
+def define_line_p(y, x, angle, ys, xs):
+	y = pix.getYCoordinate(y, ys) #real coordinates
+	x = pix.getXCoordinate(x, xs)
+	cos_angle, sin_angle = math.cos(angle), math.sin(angle)
+	p = (x * cos_angle) + (y * sin_angle)
+	return p
+
+def define_line_slope(point_a, point_b, ys, xs):
+	ayp, axp = point_a
+	byp, bxp = point_b
+	ayc, axc, byc, bxc = pix.getYCoordinate(ayp, ys), pix.getXCoordinate(axp, xs), pix.getYCoordinate(byp, ys), pix.getXCoordinate(bxp, xs)
+	if (axc - bxc) != 0:
+		m = (ayc - byc)/(axc - bxc)
+	else:
+		m = None
+	return m
+	
+def define_midpoint(point_a, point_b, ys, xs):
+	ayp, axp = point_a
+	byp, bxp = point_b
+	ayc, axc, byc, bxc = pix.getYCoordinate(ayp, ys), pix.getXCoordinate(axp, xs), pix.getYCoordinate(byp, ys), pix.getXCoordinate(bxp, xs)
+	yc = (ayc + byc)/2.0
+	xc = (axc + bxc)/2.0
+	yp, xp = pix.getYPixel(yc, ys), pix.getXPixel(xc, xs)
+	return (yp, xp)
+	
+def get_pixels_line_normal(y, x, angle, ys, xs, pixels, ignore):
+	white, black = (255, 255, 255), (0, 0, 0)
+	p = define_line_p(y, x, angle, ys, xs)
+	cos_angle, sin_angle = math.cos(angle), math.sin(angle)
+	pixels_line = []
+	if sin_angle != 0:
+		for x_pixel in xrange(xs):
+			x_new = pix.getXCoordinate(x_pixel, xs)
+			y_new = (p / sin_angle) - ((x_new * cos_angle) / sin_angle)
+			y_pixel = pix.getYPixel(y_new, ys)
+			x_pixel = pix.getXPixel(x_new, xs)
+			if y_pixel >= 0 and y_pixel < ys:
+				if ignore:
+					color_pixel = pixels[x_pixel, y_pixel]
+					if color_pixel != white and color_pixel != black:
+						pixels_line.append((y_pixel, x_pixel))
+				else:
+					pixels_line.append((y_pixel, x_pixel))
+	else:
+		for y_pixel in xrange(ys):
+			pixels_line.append((y_pixel, x))
+	return pixels_line
+	
+def get_pixels_line_slope(point_a, point_b, ys, xs, pixels, ignore):
+	white, black, red = (255, 255, 255), (0, 0, 0), (255, 0, 0)
+	slope = define_line_slope(point_a, point_b, ys, xs)
+	pixels_line = []
+	if slope is not None:
+		yp, xp = point_a
+		yc, xc = pix.getYCoordinate(yp, ys), pix.getXCoordinate(xp, xs)
+		b = yc - (xc*slope)
+		for x_pixel in xrange(xs):
+			x_new = pix.getXCoordinate(x_pixel, xs)
+			y_new = (slope*x_new) + b
+			y_pixel = pix.getYPixel(y_new, ys)
+			if ignore:
+				if y_pixel >= 0 and y_pixel < ys:
+						color_pixel = pixels[x_pixel, y_pixel]
+						if color_pixel != white and color_pixel != black:
+								pixels_line.append((y_pixel, x_pixel))
+			else:
+				pixels_line.append((y_pixel, x_pixel))
+	return pixels_line
+	
 	
 #run in the 'package' directory
 if __name__ == '__main__':

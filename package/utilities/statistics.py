@@ -62,12 +62,3 @@ def mode(elements):
 			if value > mode:
 				mode = element_key
 	return mode
-		
-def median_absolute_deviation(elements):
-	median = median(elements)
-	new_elements = []
-	for element in elements:
-		abs_dev = (element - median)
-		new_elements.append(abs_dev)
-	new_median = median(new_elements)
-	return new_median

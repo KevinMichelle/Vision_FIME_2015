@@ -4,6 +4,7 @@ import os.path
 import random
 import math
 import utilities.files as files
+import utilities.filters as filters
 import utilities.statistics as statistics
 import utilities.pix as pix
 import utilities.masks as masks
@@ -25,7 +26,7 @@ def find_gradients(image, mask_to_use, bool_normalize):
 	gradients = {}
 	for gradient_key in gradients_x: #gradient_key -> (y, x)
 		x_value, y_value = gradients_x[gradient_key], gradients_y[gradient_key]
-		gradient_value = int(math.pow(abs(x_value) + abs(y_value), 2))
+		gradient_value = math.sqrt(math.pow(x_value, 2) + math.pow(y_value, 2))
 		gradient_angle = math.atan2(x_value, y_value)
 		slope_angle = math.atan2(y_value, x_value) #i hope that i don't cause any bug
 		if gradient_key not in gradients:
@@ -60,8 +61,23 @@ def draw_edges(image, edge_gradients, bool_new):
 		y, x = gradient_key
 		pixels[x, y] = black_color
 	return image
-	
+
+#https://www.daniweb.com/software-development/python/code/216637/resize-an-image-python
 def define_edges(image, mask_to_use, bool_enhance):
+	rgb_image = image.convert('RGB')
+	gray_image = pix.grayscale_image(rgb_image)
+	xs, ys = image.size
+	total_pixels = xs * ys
+	factor = 1
+	if total_pixels < 22500:
+		factor = 1.2
+	elif total_pixels > 22500 and total_pixels < 16000:
+		factor = 0.5
+	elif total_pixels > 16000:
+		factor = 0.5
+	resize_image = pix.resize_image(gray_image, factor)
+	for dummy in xrange(3):
+		image = filters.filter_operator(resize_image, 'median')
 	bool_normalize = False
 	edge_gradients = find_edges(image, mask_to_use, bool_normalize)
 	edge_image = draw_edges(image, edge_gradients, True) #new image
@@ -77,10 +93,7 @@ def __main__(filename, choice_mask, choice_save):
 	else:
 		mask_to_use = "sobeldg" #default
 	original_image = Image.open(filename)
-	rgb_image = original_image.convert('RGB')
-	image = pix.grayscale_image(rgb_image)
-	edge_image = define_edges(image, mask_to_use, True)
-	edge_image.show()
+	edge_image = define_edges(original_image, mask_to_use, True)
 	if choice_save[0]:
 		bool_save =  files.validate_save("edges\output\\", choice_save[1], '.png')
 		if bool_save[0]:

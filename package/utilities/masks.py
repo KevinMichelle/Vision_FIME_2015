@@ -74,6 +74,9 @@ def define_mask(mask_to_use):
 		filename = "{}{}".format(mask_to_use, extension)
 		directory = "utilities\masks\special\\"
 		mask = open_file_mask(filename, directory)
+		if mask is None:
+			directory = "utilities/masks/special/"
+			mask = open_file_mask(filename, directory)
 	else:
 		directory = "utilities\masks\\"
 		file_mask = files.find_files(directory, extension)

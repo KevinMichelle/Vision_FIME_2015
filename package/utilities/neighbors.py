@@ -22,7 +22,7 @@ def find_neighbors(nodes, initial_node, parameters, axis_limits):
 				if dx >= 0 and dx < xs:
 					if type(nodes) is tuple or type(nodes) is list:
 						node_value = nodes[dx][dy]
-					else: #nodes are pixels
+					else: #nodes are pixels structure from PIL library
 						node_value = nodes[dx, dy]
 					node = (dy, dx)
 					neighbors.append((node, node_value))
