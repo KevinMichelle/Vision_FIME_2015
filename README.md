@@ -1,8 +1,12 @@
-![Hola](https://github.com/KevinMichelle/Vision_FIME_2015/blob/master/package/holes/output/sample1.png)
-
 Hi, this software implements many function of image processing functions, if you want to try a special function please read this document.
 
 All commands must be run in the 'package' directory inside this repository.
+
+WHAT'S NEW ON THE REPOSITORY
+
+![Circle](https://github.com/KevinMichelle/Vision_FIME_2015/blob/master/package/circles/output/sample1.png)
+![Ellipse](https://github.com/KevinMichelle/Vision_FIME_2015/blob/master/package/ellipses/output/sample1.png)
+![Hole](https://github.com/KevinMichelle/Vision_FIME_2015/blob/master/package/holes/output/sample1.png)
 	
 HOW TO SAVE THE NEW IMAGE
 
