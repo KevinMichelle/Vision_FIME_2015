@@ -1,3 +1,5 @@
+![Hola](https://github.com/KevinMichelle/Vision_FIME_2015/blob/master/package/holes/output/sample1.png)
+
 Hi, this software implements many function of image processing functions, if you want to try a special function please read this document.
 
 All commands must be run in the 'package' directory inside this repository.
