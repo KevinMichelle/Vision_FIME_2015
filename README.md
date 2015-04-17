@@ -2,7 +2,7 @@ Hi, this software implements many function of image processing functions, if you
 
 All commands must be run in the 'package' directory inside this repository.
 
-WHAT'S NEW ON THE REPOSITORY
+*WHAT'S NEW ON THE REPOSITORY*
 
 Circle detection (Improved!)
 ![Circle](https://github.com/KevinMichelle/Vision_FIME_2015/blob/master/package/circles/output/sample1.png)
@@ -11,7 +11,7 @@ Ellipse detection (Improved!)
 Hole detection (New!)
 ![Hole](https://github.com/KevinMichelle/Vision_FIME_2015/blob/master/package/holes/output/sample1.png)
 	
-HOW TO SAVE THE NEW IMAGE
+**HOW TO SAVE THE NEW IMAGE**
 
 If you want to save the new image please add the '-s' option and later the name of the new file in the command that you run.
 
