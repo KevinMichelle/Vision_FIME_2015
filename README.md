@@ -22,13 +22,13 @@ Hole detection (New!)
 
 If you want to save the new image please add the '-s' option and later the name of the new file in the command that you run.
 
-	python -m examples.example -s NEWNAME INPUTFILE
+	python -m edges.edge -s NEWNAME INPUTFILE
 	
 The new image will be saved in the 'output' directory inside the directory where is located the main function of the program that was executed.
 
 For example, in the previous command the new image will be saved in this directory:
 
-	your_previous_directory\Vision_FIME_2015\package\edges\output\
+	your_previous_directory\Vision_FIME_2015\package\edges\output\NEWNAME.png
 
 **I - Edge detection**
 
