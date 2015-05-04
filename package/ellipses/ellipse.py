@@ -24,7 +24,8 @@ import utilities.gradients_angles as gradients_angles
 
 def define_ellipses(image):
 	mask_to_use = "prewittdg"
-	shape_image_info = shape.floodfill(image, True)
+	whitecolor = (255, 255, 255)
+	shape_image_info = shape.floodfill(image, True, whitecolor)
 	shape_image, shape_info = shape_image_info[0], shape_image_info[1]
 	gradients = edge.find_edges(shape_image, mask_to_use, False)
 	pixels = shape_image.load()

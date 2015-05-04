@@ -16,7 +16,7 @@ def binarized_image(image):
 	frec_col = pix.frec_colors(image)
 	total = xs * ys
 	threshold = 0.005 * total
-	min_value, max_value = 1000000, -1000000
+	min_value, max_value = 1000000000000000000000, -1000000000000000000000
 	#print threshold
 	for col_value in frec_col:
 		if frec_col[col_value] > threshold:
@@ -135,15 +135,15 @@ def check_size_holes(shapes_info):
 
 def define_holes(image):
 	mask_to_use = "prewittdg"
+	blackcolor = (0, 0, 0)
 	image = pix.grayscale_image(image) #replace the image object
 	xs, ys = image.size #remove later
-	bin_image = binarized_image(image)
 	horizontal_histogram = define_histogram(image, True)
 	vertical_histogram = define_histogram(image, False)
 	horizontal_holes = find_possible_holes(horizontal_histogram, True)
 	vertical_holes = find_possible_holes(vertical_histogram, False)
 	img_holes = image_holes(image, horizontal_holes, vertical_holes)
-	shape_img_holes, shapes_info_holes = shape.floodfill(img_holes, False)
+	shape_img_holes, shapes_info_holes = shape.floodfill(img_holes, True, (255, 255, 255))
 	if shapes_info_holes is None:
 		print "Error"
 		quit()
@@ -161,7 +161,9 @@ def __main__(filename, choice_info, choice_save):
 		bool_save =  files.validate_save("holes\output\\", choice_save[1], '.png')
 		if bool_save[0]:
 			print "Directory of the new image: {}".format(bool_save[1])
-			hole_image.save(bool_save[1])			
+			hole_image.save(bool_save[1])
+	else:
+		hole_image.show()
 	return None
 		
 	

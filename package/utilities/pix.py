@@ -10,17 +10,14 @@ def resize_image(image, factor):
 	new_image = image.resize((xs, ys), Image.ANTIALIAS)
 	return new_image
 
-def enhance_pixels(image, bool_control):
+def enhance_pixels(image):
 	black_color, white_color = (0, 0, 0), (255, 255, 255)
 	pixels = image.load()
 	xs, ys = image.size
 	new_image = image.copy()
 	new_pixels = new_image.load()
 	control = 2
-	if bool_control:
-		parameters = 7, 7
-	else:
-		parameters = 3, 3
+	parameters = 3, 3
 	axis_limits = (ys, xs)
 	for y in xrange(ys):
 		for x in xrange(xs):
@@ -32,7 +29,7 @@ def enhance_pixels(image, bool_control):
 				neighbor_pixel_value = pixel_info[1][0]
 				if neighbor_pixel_value == black_color[0]:
 					counter += 1
-			if pixel_value == white_color and bool_control: #(255, 255, 255) and True
+			if pixel_value == white_color: #(255, 255, 255) and True
 				if counter > control:
 					new_pixels[x, y] = black_color #add edge pixels
 	return new_image

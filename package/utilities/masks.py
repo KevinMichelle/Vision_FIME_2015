@@ -98,8 +98,8 @@ def mask_pixel_operator(image, mask, bool_normalize):
 	last_y = ys - lower_y
 	last_x = xs - lower_x
 	new_pixels = {}
-	for y in xrange(first_y, last_y):
-		for x in xrange(first_x, last_x):
+	for y in xrange(ys):
+		for x in xrange(xs):
 			pixel = (y, x)
 			neighbor_pixels = neighbors.find_neighbors(pixels, pixel, None, axis_limits)
 			new_pixel_value = 0

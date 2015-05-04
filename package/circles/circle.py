@@ -17,7 +17,8 @@ import utilities.gradients_angles as gradients_angles
 
 def define_circles(image):
 	mask_to_use = "prewittdg"
-	shape_image_info = shape.floodfill(image, True)
+	whitecolor = (255, 255, 255)
+	shape_image_info = shape.floodfill(image, True, whitecolor)
 	shape_image, shape_info = shape_image_info[0], shape_image_info[1]
 	gradients = edge.find_edges(shape_image, mask_to_use, False)
 	pixels = shape_image.load()
@@ -151,9 +152,6 @@ def draw_circle(center, pixels, ys, xs, image):
 			y2 = (-1.0) * y1
 			ypix1 = pix.getYPixel(y1, yc * 2.0)
 			ypix2 = pix.getYPixel(y2, yc * 2.0)
-			if aux3 == 0.0:
-				print ypix1, ypix2
-				quit()
 			if ypix1 >= 0.0 and ypix1 < ys and xpi >= 0 and xpi < xs:
 				pixels[xpi, ypix1] = red
 			if ypix2 >= 0.0 and ypix2 < ys and xpi >= 0 and xpi < xs:

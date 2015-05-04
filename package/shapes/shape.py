@@ -79,10 +79,12 @@ def draw_center_mass(image, center):
 		pixels[dx, dy] = black_color
 	return None
 
-def floodfill(image, bool_edge):
-	mask_to_use = "prewittdg"
+def floodfill(image, bool_edge, objetivecolor):
+	edge_image = None
 	if bool_edge:
-		edge_image = edge.define_edges(image, mask_to_use, True) #enhance edges
+		mask_to_use = "prewittdg"
+		edge_image = edge.define_edges(image, mask_to_use) #enhance edges
+		edge_image = pix.enhance_pixels(edge_image)
 	else:
 		edge_image = image.copy()
 	white_color, black_color = (255, 255, 255), (0, 0, 0)
@@ -96,15 +98,10 @@ def floodfill(image, bool_edge):
 		for x in xrange(xs):
 			pixel_value = pixels[x, y]
 			pixel = (y, x)
-			objetivecolor = ()
-			if bool_edge:
-				objetivecolor = white_color
-			else:
-				objetivecolor = black_color
 			if pixel_value == objetivecolor:
 				visited_pixel = {}
 				newcolor = ()
-				if bool_edge:
+				if bool_edge and False: #i need to add a new option to choose the generator of colors
 					newcolor = colors.color_generator(colors_list)
 				else:
 					newcolor = colors.lazy_generator(colors_list)
@@ -131,10 +128,11 @@ def floodfill(image, bool_edge):
 
 	
 def define_shape(image, bool_info):
-	shape_image_info = floodfill(image, True)
+	whitecolor = (255, 255, 255)
+	shape_image_info = floodfill(image, True, whitecolor)
 	shape_image, shape_info = shape_image_info[0], shape_image_info[1]
 	if bool_info:
-		shape_image = draw_shapes_info(image, shape_info, True)
+		shape_image = draw_shapes_info(shape_image, shape_info, True)
 	return shape_image
 	
 def __main__(filename, choice_info, choice_save):
